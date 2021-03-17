@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://wallpapercave.com/wp/wp8493901.png" alt="BocchiBot" width="500" />
+<img src="https://wallpapercave.com/wp/wp8493901.png" alt="WATCIKER" width="500" />
 
 # _**WA-STICKER-FORMATTER**_
 
