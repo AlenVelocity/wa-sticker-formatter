@@ -1,3 +1,3 @@
-import st from './Sticker';
-export declare const Sticker: typeof st;
+import sticker from './Sticker';
+export declare const Sticker: typeof sticker;
 //# sourceMappingURL=index.d.ts.map

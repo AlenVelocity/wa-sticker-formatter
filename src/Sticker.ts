@@ -60,7 +60,6 @@ export default class Sticker {
         }
         if (!this.config.animated) {
             const file = await this.static()
-            console.log(file)
             await this.addMetadata(file)
             this.final = file
             return

@@ -23,7 +23,7 @@ const WSF = require('wa-sticker-formatter')
 ```
 ### 💙 TypeScript
 ```TS 
-import WSF from 'wa-sticker-formatter'
+import * as WSF from 'wa-sticker-formatter'
 ```
 
 ## 🎨 Creating Sticker
@@ -68,8 +68,8 @@ fs.writeFile('sticker.webp', sticBuffer)
 ### Non-cropped Animated sticker 
 ```JS
 
-const fs = require('fs') //import * as fs from 'fs'
-const image = fs.readFileSync('./image.gif') //any image buffer would work
+const fs = require('fs') 
+const image = fs.readFileSync('./image.mp4') //any Video buffer would work
 
 const sticker = new WSF.Sticker(image, { crop: false, animated: true })
 await sticker.build()
