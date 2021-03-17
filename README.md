@@ -19,21 +19,22 @@
 ## Importing
 ### JavaScript
 ```JS 
-const Sticker = require('wa-sticker-formatter')
+const WSF = require('wa-sticker-formatter')
 ```
 ### TypeScript
 ```TS 
-import Sticker = require('wa-sticker-formatter')
+import WSF from 'wa-sticker-formatter'
 ```
 
 ## Creating Sticker
 
 ```JS
-const Sticker = require('wa-sticker-formatter')
+const WSF = require('wa-sticker-formatter') //import WSF from 'wa-sticker-formatter'
 
+const fs = require('fs') //import * as fs from 'fs'
 const image = fs.readFileSync('./image.png') //any image buffer would work
 
-const sticker = new Sticker(image, { crop: false, pack: 'Packname', author: 'Author' })
+const sticker = new WSF.Sticker(image, { crop: false, pack: 'Packname', author: 'Author' })
 await sticker.build()
 const sticBuffer = sticker.get()
 
@@ -41,8 +42,8 @@ const sticBuffer = sticker.get()
 //sending with Baileys
 conn.sendMessage(jid, sticBuffer, MessageType.sticker)
 
-//sending with open-wa
-client.sendRawWebpAsSticker(chatid, sticBuffer.toString('Base64'))
+//saving to file
+fs.writeFile('sticker.webp', sticBuffer)
 
 ```
 

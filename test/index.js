@@ -1,13 +1,13 @@
 const axios = require('axios')
 const path = require('path')
 const { writeFileSync } = require('fs-extra')
-const Sticker = require('../lib')
+const WSF = require('../lib')
 
 async function create(image){
 
-    console.log(Sticker)
+    console.log(WSF)
     image = await axios.get(image, { responseType: 'arraybuffer'})
-    const sticker = new Sticker(image.data, { crop: false, animated: false })
+    const sticker = new WSF.Sticker(image.data, { crop: false, animated: false })
     await sticker.build()
     const buffer = await sticker.get()
     writeFileSync(path.join(__dirname, 'test.webp'), buffer)

@@ -1,2 +1,2 @@
-import Sticker from './Sticker'
-export = Sticker
+import sticker from './Sticker'
+export const Sticker = sticker
