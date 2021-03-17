@@ -36,7 +36,7 @@ const image = fs.readFileSync('./image.png') //any image buffer would work
 
 const sticker = new WSF.Sticker(image, { crop: false, pack: 'Packname', author: 'Author' })
 await sticker.build()
-const sticBuffer = sticker.get()
+const sticBuffer = await sticker.get()
 
 
 //sending with Baileys
