@@ -3,11 +3,13 @@
 
 # _**WA-STICKER-FORMATTER**_
 
-> Made for your sticker creation needs
+> For your sticker creation needs
 >
 >
 </div><br/>
 <br/>
+
+*Make sure you have `ImageMagic` and `libwebp` installed in your system before using this*
 
 # 🏮 Installation
 ```cmd
@@ -50,55 +52,43 @@ fs.writeFile('sticker.webp', sticBuffer)
 ### Non-streched sticker 
 
 ```JS
-const fs = require('fs') //import * as fs from 'fs'
-const image = fs.readFileSync('./image.png') //any image buffer would work
+const image = fs.readFileSync('https://example.com/example.png') //any image | buffer | url | path would work
 
 const sticker = new WSF.Sticker(image, { crop: false })
 await sticker.build()
 const sticBuffer = await sticker.get()
 
-
-//sending with Baileys
-conn.sendMessage(jid, sticBuffer, MessageType.sticker)
-
-//saving to file
-fs.writeFile('sticker.webp', sticBuffer)
 ```
 
 ### Non-cropped Animated sticker 
 ```JS
 
-const fs = require('fs') 
-const image = fs.readFileSync('./image.mp4') //any Video buffer would work
-
-const sticker = new WSF.Sticker(image, { crop: false, animated: true })
+const sticker = new WSF.Sticker('./image.mp4', { crop: false, animated: true })
 await sticker.build()
 const sticBuffer = await sticker.get()
 
-
-//sending with Baileys
-conn.sendMessage(jid, sticBuffer, MessageType.sticker)
-
-//saving to file
-fs.writeFile('sticker.webp', sticBuffer)
 ```
 ### Sticker with Pack and Author Name
 
 ```JS
 
-const fs = require('fs') //import * as fs from 'fs'
-const image = fs.readFileSync('./image.mp4') //any image buffer would work
-
-const sticker = new WSF.Sticker(image, { crop: false, animated: true, pack: 'Pack', author: 'AUTHOR' })
+const sticker = new WSF.Sticker('https://example.com/sample.mp4', { crop: false, animated: true, pack: 'Pack', author: 'AUTHOR' })
 await sticker.build()
 const sticBuffer = await sticker.get()
+```
 
+## 💌 Saving/Sending
 
+```JS
 //sending with Baileys
 conn.sendMessage(jid, sticBuffer, MessageType.sticker)
 
+//sending with open-wa 
+client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
+
 //saving to file
 fs.writeFile('sticker.webp', sticBuffer)
+
 ```
 
 

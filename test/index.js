@@ -1,16 +1,17 @@
 const axios = require('axios')
 const path = require('path')
-const { writeFileSync } = require('fs-extra')
+const { writeFile, readdir, readdirSync, readFileSync,  } = require('fs-extra')
 const WSF = require('../lib')
 
-async function create(image){
+async function create(){
 
     console.log(WSF)
-    image = await axios.get(image, { responseType: 'arraybuffer'})
-    const sticker = new WSF.Sticker(image.data, { crop: false, animated: false })
+    console.log('STARTING...')
+    const sticker = new WSF.Sticker('https://images.wallpapersden.com/image/download/watson-amelia-virtual-youtuber_bGlqZ2yUmZqaraWkpJRnaWVlrWZnZWU.jpg', { crop: false })
     await sticker.build()
-    const buffer = await sticker.get()
-    writeFileSync(path.join(__dirname, 'test.webp'), buffer)
+    const data = await sticker.get()
+    console.log(data)
+    writeFile(path.join(__dirname, 'test.webp'), data)
 }
 
-create('https://static.wikia.nocookie.net/virtualyoutuber/images/9/97/Watson_Amelia_Portrait.png/revision/latest/top-crop/width/360/height/450?cb=20200910193116')
+create()

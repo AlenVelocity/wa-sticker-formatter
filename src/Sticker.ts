@@ -1,34 +1,68 @@
 import ffmpeg from 'fluent-ffmpeg'
-import path from 'path'
+import axios from 'axios'
 import { exec as ex } from 'child_process'
 import util from 'util'
 import * as fs from 'fs-extra'
-const streamifier = require('streamifier')
 import os from 'os'
 import sizeOf from 'image-size'
-const gifFrames = require('gif-frames')
 import * as Jimp from 'jimp'
+
+const streamifier = require('streamifier')
+const gifFrames = require('gif-frames')
+
 const exec = util.promisify(ex)
+
+
+
+import ft, { mimeTypes } from 'file-type'
 
 export default class Sticker {
 
-    data: Buffer
+    /**
+     * Supported MimeTypes
+    */
+    supportedTypes = ['video/mp4', 'image/gif', 'image/jpeg', 'image/png']
+    /**
+     * Buffer of the image/video provided
+    */
+    private data: Buffer | string
+   
+
+    /**
+     * Sticker Config
+     */
     config: {
-        animated: Boolean
+        animated: boolean
         crop: boolean
         pack: string
         author: string
     }
-    path: string
-    animatedBase = {
+    /**
+     * path of the file
+    */
+    private path: string
+
+    /**
+     * Processoptions to pass to ffmpeg
+    */
+    processOptions: processOptions = {
             fps: 15,
             startTime: `00:00:00.0`,
             endTime: `00:00:10.0`,
             loop: 0,
     }
-    final: string = ''
+    private final: string = ''
 
-    constructor(data: Buffer, { animated = false, crop = true, author = 'WA-STICKER-FORMATTER', pack = 'MADE USING'}) {
+    /**
+     * MimeType of the buffer provided
+    */
+    private mime = ''
+
+    /**
+     * @param data 
+     * @param param1 
+     */
+    constructor(data: Buffer | string, { animated = false, crop = true, author = 'WA-STICKER-FORMATTER', pack = 'MADE USING'}) {
         this.data = data
         this.config = {
             animated,
@@ -39,35 +73,44 @@ export default class Sticker {
         this.path = os.tmpdir()
     }
 
-    async build() {
-        if (!this.config.animated && !this.config.crop) {
-            const file = await this.staticNoCrop()
-            await this.addMetadata(file)
-            this.final = file
-            return
+    /**
+     * 
+     * @param processOptions (optional)
+     */
+    async build(processOptions: processOptions = this.processOptions) {
+        this.processOptions = processOptions
+        if (typeof this.data === 'string') {
+            if (this.data.startsWith('./')) {
+                if (!fs.existsSync(this.data)) throw new Error(`${this.data} filepath does not exist`)
+                this.data = await fs.readFile(this.data)
+            } else {
+                this.data = (await axios.get(this.data, { responseType: 'arraybuffer'})).data
+            }
         }
-        if (this.config.animated && !this.config.crop) {
-            const file = await this.animatedNoCrop()
-            await this.addMetadata(file)
-            this.final = file
-            return
+    
+        const mime = (await ft.fromBuffer((this.data as any)))?.mime
+        if (!mime) throw new Error('Invalid Input')
+        this.mime = mime
+        if (this.mime === 'image/gif' || this.mime === 'video/mp4') this.config.animated = true
+        if (!this.config.animated) {
+                const file = (!this.config.crop) ? await this.staticNoCrop() : await this.static()
+                await this.addMetadata(file)
+                this.final = file
         }
         if (this.config.animated) {
-            const file = await this.animated()
+            const file = (!this.config.crop) ? await this.animatedNoCrop() : await this.animated()
             await this.addMetadata(file)
             this.final = file
             return
         }
-        if (!this.config.animated) {
-            const file = await this.static()
-            await this.addMetadata(file)
-            this.final = file
-            return
-        }
+    
+    
     }
-
+    /**
+     * @returns {Buffer} webp
+     */
     async get() {
-        const buffer = await fs.readFile(this.final)
+        const buffer = fs.readFileSync(this.final)
         return buffer
     }
 
@@ -76,7 +119,7 @@ export default class Sticker {
         const stream = await (streamifier as any).createReadStream(this.data)
             let success = await new Promise((resolve, reject) => {
             var command = ffmpeg(stream)
-                .inputFormat("mp4")
+                .inputFormat((this.mime as any) === this.supportedTypes[1] ? 'gif' : 'mp4')
                 .on("error", function (err) {
                     console.log("An error occurred: " + err.message)
                     reject(err)
@@ -98,8 +141,9 @@ export default class Sticker {
         const rn = Math.random()
         const fileName = `${this.path}/${rn.toString(36)}`
         const fileNameF = `${this.path}/${rn.toString(36)}`
-        await fs.writeFile(`${fileName}.mp4`, this.data)
-        await exec(`ffmpeg -y -i ${fileName}.mp4 ${fileName}.gif`, {})
+        const sv = `${fileName}${(this.mime as any) === this.supportedTypes[0] ? '.mp4' : '.gif'}`
+        await fs.writeFile(sv, this.data)
+        if ((this.mime as any) === this.supportedTypes[0]) await exec(`ffmpeg -y -i ${fileName}.mp4 ${fileName}.gif`, {})
         let frames = ''
         await (gifFrames as any)({ url: fileName+'.gif', frames: 'all' }).then(function (frameData: any) {
            frameData[0].getImage().pipe(fs.createWriteStream(fileName + '.png'))
@@ -247,13 +291,13 @@ export default class Sticker {
         `-vcodec`,
         `libwebp`,
         `-vf`,
-        `crop=w='min(min(iw\,ih)\,500)':h='min(min(iw\,ih)\,500)',scale=500:500,setsar=1,fps=${this.animatedBase.fps}`,
+        `crop=w='min(min(iw\,ih)\,500)':h='min(min(iw\,ih)\,500)',scale=500:500,setsar=1,fps=${this.processOptions.fps}`,
         `-loop`,
-        `${this.animatedBase.loop}`,
+        `${this.processOptions.loop}`,
         `-ss`,
-        this.animatedBase.startTime,
+        this.processOptions.startTime,
         `-t`,
-        this.animatedBase.endTime,
+        this.processOptions.endTime,
         `-preset`,
         `default`,
         `-an`,
@@ -261,4 +305,11 @@ export default class Sticker {
         `0`,
         `-s`,
         `512:512`]
+}
+
+interface processOptions {
+    fps: number,
+    startTime: string,
+    endTime: string,
+    loop: number,
 }

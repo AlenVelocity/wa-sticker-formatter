@@ -1,12 +1,12 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "",
   "main": "lib",
   "types": "lib",
   "scripts": {
     "build": "tsc -p .",
-    "test": "node ./test"
+    "test": "node --trace-warnings ./test"
   },
   "keywords": [],
   "author": {
@@ -18,15 +18,17 @@
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.16",
     "@types/fs-extra": "^9.0.8",
-    "@types/node": "^14.14.35",
-    "axios": "^0.21.1"
+    "@types/node": "^14.14.35"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "file-type": "^16.3.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^9.1.0",
     "gif-frames": "^1.0.1",
     "image-size": "^0.9.7",
     "jimp": "^0.16.1",
+    "mimetypes": "^0.1.1",
     "streamifier": "^0.1.1"
   }
 }
