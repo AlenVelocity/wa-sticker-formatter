@@ -3,7 +3,7 @@
 
 # _**WA-STICKER-FORMATTER**_
 
-> For your sticker creation needs
+> Whatsapp Sticker Creator/Formatter!
 >
 >
 </div><br/>
@@ -33,27 +33,16 @@ import * as WSF from 'wa-sticker-formatter'
 ### Regular Sticker
 
 ```JS
-const fs = require('fs') //import * as fs from 'fs'
-const image = fs.readFileSync('./image.png') //any image buffer would work
-
-const sticker = new WSF.Sticker(image, {})
+const sticker = new WSF.Sticker('image.png', {})
 await sticker.build()
 const sticBuffer = await sticker.get()
-
-
-//sending with Baileys
-conn.sendMessage(jid, sticBuffer, MessageType.sticker)
-
-//saving to file
-fs.writeFile('sticker.webp', sticBuffer)
 
 ```
 
 ### Non-streched sticker 
 
 ```JS
-const image = fs.readFileSync('https://example.com/example.png') //any image | buffer | url | path would work
-
+const image = 'https://example.com/example.png' 
 const sticker = new WSF.Sticker(image, { crop: false })
 await sticker.build()
 const sticBuffer = await sticker.get()
@@ -79,16 +68,19 @@ const sticBuffer = await sticker.get()
 
 ## 💌 Saving/Sending
 
+### Saving to File
 ```JS
-//sending with Baileys
-conn.sendMessage(jid, sticBuffer, MessageType.sticker)
-
-//sending with open-wa 
-client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
-
-//saving to file
 fs.writeFile('sticker.webp', sticBuffer)
-
 ```
+### Sending With [Baileys](https://github.com/wa-sticker-formatter)
+```JS
+conn.sendMessage(jid, sticBuffer, MessageType.sticker)
+```
+### Sending With [Open-Wa](https://github.com/open-wa/wa-automate)
+
+```JS 
+client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
+```
+
 
 
