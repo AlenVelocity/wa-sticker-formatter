@@ -120,16 +120,16 @@ export default class Sticker {
             let success = await new Promise((resolve, reject) => {
             var command = ffmpeg(stream)
                 .inputFormat((this.mime as any) === this.supportedTypes[1] ? 'gif' : 'mp4')
-                .on("error", function (err) {
-                    console.log("An error occurred: " + err.message)
+                .on('error', function (err) {
+                    console.log('An error occurred: ' + err.message)
                     reject(err)
                 })
-                .on("start", function (cmd) {
-                    //console.log("Started " + cmd);
+                .on('start', function (cmd) {
+                    //console.log('Started ' + cmd);
                 })
                 .addOutputOptions(this.outputOptions)
-                .toFormat("webp")
-                .on("end", () => {
+                .toFormat('webp')
+                .on('end', () => {
                     resolve(true);
                 })
                 .saveToFile(`${filename}.webp`)
@@ -238,11 +238,11 @@ export default class Sticker {
     }
 
     createExif(packname: string = this.config.pack, author: string = this.config.author) {
-        const stickerPackID = "com.etheral.waifuhub.android.stickercontentprovider b5e7275f-f1de-4137-961f-57becfad34f2"
+        const stickerPackID = 'com.etheral.waifuhub.android.stickercontentprovider b5e7275f-f1de-4137-961f-57becfad34f2'
         const json = {
-            "sticker-pack-id": stickerPackID,
-            "sticker-pack-name": packname,
-            "sticker-pack-publisher": author,
+            'sticker-pack-id': stickerPackID,
+            'sticker-pack-name': packname,
+            'sticker-pack-publisher': author,
         };
     
         let length = JSON.stringify(json).length;
@@ -264,12 +264,12 @@ export default class Sticker {
         let len
         if (length < 16) {
             len = length.toString(16);
-            len = "0" + length;
+            len = '0' + length;
         } else {
             len = length.toString(16);
         }
     
-        const ff = Buffer.from(len, "hex");
+        const ff = Buffer.from(len, 'hex');
         const buffer = Buffer.concat([f, ff, fff, ffff]);
         const fn = `${this.path}/${Math.random().toString()}.exif`
         fs.writeFileSync(fn, buffer)

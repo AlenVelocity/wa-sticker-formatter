@@ -1,21 +1,33 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "",
-  "main": "lib",
+  "main": "lib/index.js",
   "types": "lib",
-  "files": ["./lib/**/*"],
+  "files": [
+    "./lib/**/*", 
+    "./test/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "node --trace-warnings ./test"
   },
-  "keywords": [],
+  "keywords": [
+    "whatsapp",
+    "stickers",
+    "whatsapp-stickers",
+    "webp"
+  ],
   "author": {
     "name": "Alen Yohannan",
     "email": "alenyohannan71@gmail.com",
     "url": "https://github.com/Alensaito1"
   },
   "license": "ISC",
+  "repository": {
+    "url": "https://github.com/Alensaito1/wa-sticker-formatter"
+  },
+  "issues": "https://github.com/Alensaito1/wa-sticker-formatter",
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.16",
     "@types/fs-extra": "^9.0.8",
