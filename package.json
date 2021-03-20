@@ -1,12 +1,12 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib",
   "types": "lib",
   "files": [
-    "./lib/**/*", 
-    "./test/**/*"
+    "lib", 
+    "test"
   ],
   "scripts": {
     "build": "tsc",
