@@ -114,7 +114,10 @@ export default class Sticker {
         return buffer
     }
 
-    async animated() {
+    /**
+     * @returns {string} Filename
+     */
+    private async animated() {
         const filename = `${this.path}/${Math.random().toString()}`
         const stream = await (streamifier as any).createReadStream(this.data)
             let success = await new Promise((resolve, reject) => {
@@ -137,6 +140,9 @@ export default class Sticker {
             return `${filename}.webp`
     }
 
+    /**
+     * @returns {string} Filename
+     */
     async animatedNoCrop() {
         const rn = Math.random()
         const fileName = `${this.path}/${rn.toString(36)}`
@@ -213,6 +219,9 @@ export default class Sticker {
       return `${fileName}.webp`
     }
 
+    /**
+     * @returns {string} Filename
+     */
     async static() {
         const file = `${this.path}/${Math.random().toString()}`
         fs.writeFileSync(`${file}.png`, this.data)
@@ -220,6 +229,9 @@ export default class Sticker {
         return `${file}.webp`
     }
 
+    /**
+     * @returns {string} Filename
+     */
     async staticNoCrop() {
         const filename = `${this.path}/${Math.random().toString(36)}`
         fs.writeFileSync(`${filename}.png`, this.data)
@@ -276,6 +288,9 @@ export default class Sticker {
         return fn
     }
 
+    /**
+     * @returns {string} Filename
+     */
     async delete(files: string[]) {
         for (let file of files) {
             try {
