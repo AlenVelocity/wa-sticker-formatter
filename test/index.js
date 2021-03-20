@@ -1,13 +1,13 @@
 const axios = require('axios')
 const path = require('path')
 const { writeFile, readdir, readdirSync, readFileSync,  } = require('fs-extra')
-const WSF = require('../lib')
+const { Sticker } = require('../lib')
 
 async function create(){
 
     console.log(WSF)
     console.log('STARTING...')
-    const sticker = new WSF.Sticker('https://images.wallpapersden.com/image/download/watson-amelia-virtual-youtuber_bGlqZ2yUmZqaraWkpJRnaWVlrWZnZWU.jpg', { crop: false })
+    const sticker = new Sticker('https://images.wallpapersden.com/image/download/watson-amelia-virtual-youtuber_bGlqZ2yUmZqaraWkpJRnaWVlrWZnZWU.jpg', { crop: false })
     await sticker.build()
     const data = await sticker.get()
     console.log(data)
