@@ -59,6 +59,7 @@ export default class Sticker {
     private mime = ''
 
     /**
+     * Creates a new instance of the "Sticker Class"
      * @param data 
      * @param param1 
      */
@@ -74,8 +75,8 @@ export default class Sticker {
     }
 
     /**
-     * 
-     * @param processOptions (optional)
+     * Builds the sticker 
+     * @param processOptions
      */
     async build(processOptions: processOptions = this.processOptions) {
         this.processOptions = processOptions
@@ -107,7 +108,7 @@ export default class Sticker {
     
     }
     /**
-     * @returns {Buffer} webp
+     * @returns {Buffer} Returns the build result
      */
     async get() {
         const buffer = fs.readFileSync(this.final)
@@ -117,7 +118,7 @@ export default class Sticker {
     /**
      * @returns {string} Filename
      */
-    private async animated() {
+    async animated() {
         const filename = `${this.path}/${Math.random().toString()}`
         const stream = await (streamifier as any).createReadStream(this.data)
             let success = await new Promise((resolve, reject) => {
@@ -141,6 +142,7 @@ export default class Sticker {
     }
 
     /**
+     * Creates animated sticker without with transparant borders
      * @returns {string} Filename
      */
     async animatedNoCrop() {
@@ -154,9 +156,7 @@ export default class Sticker {
         await (gifFrames as any)({ url: fileName+'.gif', frames: 'all' }).then(function (frameData: any) {
            frameData[0].getImage().pipe(fs.createWriteStream(fileName + '.png'))
            frames = frameData
-        })
-        //  console.log(frames.length)
-  
+        })  
         if (frames.length < 7) await exec('convert ' + fileName + '.gif ' + fileName + '.gif  ' + fileName + '.gif', {})
   
         await exec('convert ' + fileName + '.gif -coalesce -delete 0 ' + fileName + '.gif', {})
@@ -191,19 +191,15 @@ export default class Sticker {
                     }
   
                 let hex = Jimp.rgbaToInt(colors.r, colors.g, colors.b, colors.a)
-  
-                //     console.log(hex)
-                image.setPixelColor(hex, i, j) // sets the colour of that pixel
+                  image.setPixelColor(hex, i, j) 
                 success = false
               }
             }
             image.write(fileNameF + '.png')
           })
           .catch((err) => {
-            // console.log('ERROR: ' + err)
           })
       }
-      // console.log(dimensions.width + '  ' + dimensions.height)
       if (dimensions.width! < dimensions.height!) {
         await exec('mogrify -bordercolor transparent -border ' + (dimensions.height! - dimensions.width!) / 2 + 'x0 ' + fileName + '.gif', {})
         await exec('mogrify -bordercolor transparent -border ' + (dimensions.height! - dimensions.width!) / 2 + 'x0 ' + fileNameF + '.png', {})
@@ -214,12 +210,12 @@ export default class Sticker {
       } 
       await exec('convert ' + fileNameF + '.png ' + fileName + '.gif -resize 256x256 ' + fileName + '.gif', {})
       let stats = fs.statSync(fileName + '.gif')
-      // console.log(stats['size'])
       await exec(`gif2webp ${fileName}.gif -o ${fileName}.webp`)
       return `${fileName}.webp`
     }
 
     /**
+     * Creates Static sticker 
      * @returns {string} Filename
      */
     async static() {
@@ -230,25 +226,32 @@ export default class Sticker {
     }
 
     /**
-     * @returns {string} Filename
+     * Creates static sticker with transparent borders
+     * @returns {string} Filename 
      */
     async staticNoCrop() {
         const filename = `${this.path}/${Math.random().toString(36)}`
         fs.writeFileSync(`${filename}.png`, this.data)
         var dimensions = sizeOf(this.data)
-        //console.log(dimensions.width + '  ' + dimensions.height)
         if (dimensions.width! < dimensions.height!) await exec(`mogrify -bordercolor transparent -border ${(dimensions.height! - dimensions.width!) / 2}x0 ${filename}.png`)
         if (dimensions.width! > dimensions.height!) await exec(`mogrify -bordercolor transparent -border 0x${(dimensions.width! - dimensions.height!) / 2} ${filename}.png`)
-	
-	//'sticker/' + message.from + '.png'
         await exec(`cwebp ${filename}.png -o ${filename}.webp`)
         return `${filename}.webp`
     }
 
+    /**
+     * Adds the pack and author titles to the EXIF metadata of the webp
+     * @param filename 
+     */
     async addMetadata(filename: string) {
         await exec(`webpmux -set exif ${this.createExif()} ${filename} -o ${filename}`)
     }
 
+    /**
+     * Creates the EXIF file withe the given Metadata
+     * @param packname 
+     * @param author 
+     */
     createExif(packname: string = this.config.pack, author: string = this.config.author) {
         const stickerPackID = 'com.etheral.waifuhub.android.stickercontentprovider b5e7275f-f1de-4137-961f-57becfad34f2'
         const json = {
@@ -289,19 +292,8 @@ export default class Sticker {
     }
 
     /**
-     * @returns {string} Filename
+     * Output options for FFMpeg
      */
-    async delete(files: string[]) {
-        for (let file of files) {
-            try {
-                fs.unlink(file)
-            } catch(err) {
-                console.log(err.message)
-                continue
-            }
-        }
-    }
-
     outputOptions = [
         `-vcodec`,
         `libwebp`,
@@ -322,6 +314,9 @@ export default class Sticker {
         `512:512`]
 }
 
+/**
+ * Interface for the FFMpeg Process options
+ */
 interface processOptions {
     fps: number,
     startTime: string,

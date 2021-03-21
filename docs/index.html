@@ -1,0 +1,190 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>wa-sticker-formatter</title>
+	<meta name="description" content="Documentation for wa-sticker-formatter">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">wa-sticker-formatter</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>wa-sticker-formatter</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<div align="center">
+					<img src="https://wallpapercave.com/wp/wp8493901.png" alt="WATCIKER" width="500" />
+					<a href="#wa-sticker-formatter" id="wa-sticker-formatter" style="color: inherit; text-decoration: none;">
+						<h1><em><strong>WA-STICKER-FORMATTER</strong></em></h1>
+					</a>
+					<blockquote>
+						<p>Whatsapp Sticker Creator/Formatter!</p>
+					</blockquote>
+				</div><br/>
+				<br/>
+				<p><em>Make sure you have <code>ImageMagic</code> and <code>libwebp</code> installed in your system before using this</em></p>
+				<a href="#🏮-installation" id="🏮-installation" style="color: inherit; text-decoration: none;">
+					<h1>🏮 Installation</h1>
+				</a>
+				<pre><code class="language-cmd">&gt; npm i wa-sticker-formatter
+</code></pre>
+				<a href="#🎋-usage" id="🎋-usage" style="color: inherit; text-decoration: none;">
+					<h1>🎋 Usage</h1>
+				</a>
+				<a href="#importing" id="importing" style="color: inherit; text-decoration: none;">
+					<h2>Importing</h2>
+				</a>
+				<a href="#💛-javascript" id="💛-javascript" style="color: inherit; text-decoration: none;">
+					<h3>💛 JavaScript</h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;wa-sticker-formatter&#039;</span><span style="color: #000000">)</span>
+</code></pre>
+				<a href="#💙-typescript" id="💙-typescript" style="color: inherit; text-decoration: none;">
+					<h3>💙 TypeScript</h3>
+				</a>
+				<pre><code class="language-TS"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">WSF</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;wa-sticker-formatter&#039;</span>
+</code></pre>
+				<a href="#🎨-creating-sticker" id="🎨-creating-sticker" style="color: inherit; text-decoration: none;">
+					<h2>🎨 Creating Sticker</h2>
+				</a>
+				<a href="#regular-sticker" id="regular-sticker" style="color: inherit; text-decoration: none;">
+					<h3>Regular Sticker</h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticker</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000">.</span><span style="color: #795E26">Sticker</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;image.png&#039;</span><span style="color: #000000">, {})</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
+
+</code></pre>
+				<a href="#non-streched-sticker" id="non-streched-sticker" style="color: inherit; text-decoration: none;">
+					<h3>Non-streched sticker</h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">image</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;https://example.com/example.png&#039;</span><span style="color: #000000"> </span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticker</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000">.</span><span style="color: #795E26">Sticker</span><span style="color: #000000">(</span><span style="color: #001080">image</span><span style="color: #000000">, { </span><span style="color: #001080">crop:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000"> })</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
+
+</code></pre>
+				<a href="#non-cropped-animated-sticker" id="non-cropped-animated-sticker" style="color: inherit; text-decoration: none;">
+					<h3>Non-cropped Animated sticker</h3>
+				</a>
+				<pre><code class="language-JS">
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticker</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000">.</span><span style="color: #795E26">Sticker</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;./image.mp4&#039;</span><span style="color: #000000">, { </span><span style="color: #001080">crop:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000">, </span><span style="color: #001080">animated:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000"> })</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
+
+</code></pre>
+				<a href="#sticker-with-pack-and-author-name" id="sticker-with-pack-and-author-name" style="color: inherit; text-decoration: none;">
+					<h3>Sticker with Pack and Author Name</h3>
+				</a>
+				<pre><code class="language-JS">
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticker</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000">.</span><span style="color: #795E26">Sticker</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://example.com/sample.mp4&#039;</span><span style="color: #000000">, { </span><span style="color: #001080">crop:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000">, </span><span style="color: #001080">animated:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #001080">pack:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Pack&#039;</span><span style="color: #000000">, </span><span style="color: #001080">author:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;AUTHOR&#039;</span><span style="color: #000000"> })</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
+</code></pre>
+				<a href="#💌-savingsending" id="💌-savingsending" style="color: inherit; text-decoration: none;">
+					<h2>💌 Saving/Sending</h2>
+				</a>
+				<a href="#saving-to-file" id="saving-to-file" style="color: inherit; text-decoration: none;">
+					<h3>Saving to File</h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #001080">fs</span><span style="color: #000000">.</span><span style="color: #795E26">writeFile</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sticker.webp&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">)</span>
+</code></pre>
+				<a href="#sending-with-baileys" id="sending-with-baileys" style="color: inherit; text-decoration: none;">
+					<h3>Sending With <a href="https://github.com/wa-sticker-formatter">Baileys</a></h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #001080">conn</span><span style="color: #000000">.</span><span style="color: #795E26">sendMessage</span><span style="color: #000000">(</span><span style="color: #001080">jid</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">, </span><span style="color: #001080">MessageType</span><span style="color: #000000">.</span><span style="color: #001080">sticker</span><span style="color: #000000">)</span>
+</code></pre>
+				<a href="#sending-with-open-wa" id="sending-with-open-wa" style="color: inherit; text-decoration: none;">
+					<h3>Sending With <a href="https://github.com/open-wa/wa-automate">Open-Wa</a></h3>
+				</a>
+				<pre><code class="language-JS"><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">sendRawWebpAsSticker</span><span style="color: #000000">(</span><span style="color: #001080">jid</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">))</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker.html">Sticker</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/index.html">index</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
