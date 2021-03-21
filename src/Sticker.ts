@@ -16,7 +16,7 @@ const exec = util.promisify(ex)
 
 import ft, { mimeTypes } from 'file-type'
 
-export default class Sticker {
+export class Sticker {
 
     /**
      * Supported MimeTypes

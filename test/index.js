@@ -5,7 +5,6 @@ const { Sticker } = require('../lib')
 
 async function create(){
 
-    console.log(WSF)
     console.log('STARTING...')
     const sticker = new Sticker('https://images.wallpapersden.com/image/download/watson-amelia-virtual-youtuber_bGlqZ2yUmZqaraWkpJRnaWVlrWZnZWU.jpg', { crop: false })
     await sticker.build()
