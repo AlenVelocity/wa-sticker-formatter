@@ -1,6 +1,6 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "",
   "main": "lib",
   "types": "lib",
@@ -9,7 +9,8 @@
     "test"
   ],
   "scripts": {
-    "build": "tsc && npx typedoc src/index.ts src/Sticker.ts",
+    "build": "tsc",
+    "doc": "npx typedoc src/index.ts src/Sticker.ts",
     "test": "node --trace-warnings ./test"
   },
   "keywords": [

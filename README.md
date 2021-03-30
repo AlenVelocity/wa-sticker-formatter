@@ -72,11 +72,11 @@ const sticBuffer = await sticker.get()
 ```JS
 fs.writeFile('sticker.webp', sticBuffer)
 ```
-### Sending With [Baileys](https://github.com/wa-sticker-formatter)
+### Sending With [Baileys](https://github.com/@adiwajshing/baileyys)
 ```JS
 conn.sendMessage(jid, sticBuffer, MessageType.sticker)
 ```
-### Sending With [Open-Wa](https://github.com/open-wa/wa-automate)
+### Sending With [Open-Wa](https://github.com/open-wa/wa-automate-nodejs)
 
 ```JS 
 client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
