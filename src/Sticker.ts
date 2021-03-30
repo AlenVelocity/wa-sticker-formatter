@@ -260,7 +260,7 @@ export class Sticker {
             'sticker-pack-publisher': author,
         };
     
-        let length = JSON.stringify(json).length;
+        let length = new TextEncoder("utf-8").encode(JSON.stringify(json)).length;
         const f = Buffer.from([0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00]);
         const code = [0x00,
             0x00,
