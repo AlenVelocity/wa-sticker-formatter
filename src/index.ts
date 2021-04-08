@@ -1,2 +1,1 @@
-export * from './Sticker'
-
+export * from './Sticker/Main'

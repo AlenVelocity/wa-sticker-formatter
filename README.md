@@ -4,7 +4,7 @@
 # _**WA-STICKER-FORMATTER**_
 
 > Whatsapp Sticker Creator/Formatter!
->
+> 
 >
 </div><br/>
 <br/>
@@ -66,17 +66,27 @@ await sticker.build()
 const sticBuffer = await sticker.get()
 ```
 
+## Setting Metadata Seperetely
+
+```JS
+const sticker = new WSF.Sticker('https://example.com/sample.mp4')
+sticker.setAuthor('Me! 〽') //Now Supports Emojis! 🎊
+sticker.setPack('My Pack! 🍱') 
+await sticker.build()
+const sticBuffer = await sticker.get()
+```
+
 ## 💌 Saving/Sending
 
 ### Saving to File
 ```JS
 fs.writeFile('sticker.webp', sticBuffer)
 ```
-### Sending With [Baileys](https://github.com/@adiwajshing/baileyys)
+### Sending With [Baileys](https://github.com/@adiwajshing/baileys)
 ```JS
 conn.sendMessage(jid, sticBuffer, MessageType.sticker)
 ```
-### Sending With [Open-Wa](https://github.com/open-wa/wa-automate-nodejs)
+### Sending With [Open-Wa/Wa-Automate-Nodejs](https://github.com/open-wa/wa-automate-nodejs)
 
 ```JS 
 client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
