@@ -9,7 +9,7 @@
 </div><br/>
 <br/>
 
-*Make sure you have `ImageMagic` and `libwebp` installed in your system before using this*
+*Make sure you have `ImageMagick` installed in your system before using this*
 
 # 🏮 Installation
 ```cmd
