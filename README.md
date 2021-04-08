@@ -76,6 +76,20 @@ await sticker.build()
 const sticBuffer = await sticker.get()
 ```
 
+> You can also set metadata using the following function too
+
+```TS
+import { setMetadata } from 'wa-sticker-formatter'
+const sticBuffer = await setMetadata('Pack', 'Author','image.webp')
+```
+
+> Create Manual exif file 
+
+```TS
+import { createExif } from 'wa-sticker-formatter'
+createExif('Pack', 'Author', 'metadata')
+```
+
 ## 💌 Saving/Sending
 
 ### Saving to File

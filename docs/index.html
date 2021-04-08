@@ -68,7 +68,7 @@
 					</blockquote>
 				</div><br/>
 				<br/>
-				<p><em>Make sure you have <code>ImageMagic</code> and <code>libwebp</code> installed in your system before using this</em></p>
+				<p><em>Make sure you have <code>ImageMagick</code> installed in your system before using this</em></p>
 				<a href="#🏮-installation" id="🏮-installation" style="color: inherit; text-decoration: none;">
 					<h1>🏮 Installation</h1>
 				</a>
@@ -127,6 +127,27 @@
 <span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
 </code></pre>
+				<a href="#setting-metadata-seperetely" id="setting-metadata-seperetely" style="color: inherit; text-decoration: none;">
+					<h2>Setting Metadata Seperetely</h2>
+				</a>
+				<pre><code class="language-JS"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticker</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #0070C1">WSF</span><span style="color: #000000">.</span><span style="color: #795E26">Sticker</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://example.com/sample.mp4&#039;</span><span style="color: #000000">)</span>
+<span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">setAuthor</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Me! 〽&#039;</span><span style="color: #000000">) </span><span style="color: #008000">//Now Supports Emojis! 🎊</span>
+<span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">setPack</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;My Pack! 🍱&#039;</span><span style="color: #000000">) </span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">build</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sticker</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
+</code></pre>
+				<blockquote>
+					<p>You can also set metadata using the following function too</p>
+				</blockquote>
+				<pre><code class="language-TS"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">setMetadata</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;wa-sticker-formatter&#039;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sticBuffer</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">setMetadata</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Pack&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;Author&#039;</span><span style="color: #000000">,</span><span style="color: #A31515">&#039;image.webp&#039;</span><span style="color: #000000">)</span>
+</code></pre>
+				<blockquote>
+					<p>Create Manual exif file </p>
+				</blockquote>
+				<pre><code class="language-TS"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">createExif</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;wa-sticker-formatter&#039;</span>
+<span style="color: #795E26">createExif</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Pack&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;Author&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;metadata&#039;</span><span style="color: #000000">)</span>
+</code></pre>
 				<a href="#💌-savingsending" id="💌-savingsending" style="color: inherit; text-decoration: none;">
 					<h2>💌 Saving/Sending</h2>
 				</a>
@@ -136,12 +157,12 @@
 				<pre><code class="language-JS"><span style="color: #001080">fs</span><span style="color: #000000">.</span><span style="color: #795E26">writeFile</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sticker.webp&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">)</span>
 </code></pre>
 				<a href="#sending-with-baileys" id="sending-with-baileys" style="color: inherit; text-decoration: none;">
-					<h3>Sending With <a href="https://github.com/@adiwajshing/baileyys">Baileys</a></h3>
+					<h3>Sending With <a href="https://github.com/@adiwajshing/baileys">Baileys</a></h3>
 				</a>
 				<pre><code class="language-JS"><span style="color: #001080">conn</span><span style="color: #000000">.</span><span style="color: #795E26">sendMessage</span><span style="color: #000000">(</span><span style="color: #001080">jid</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">, </span><span style="color: #001080">MessageType</span><span style="color: #000000">.</span><span style="color: #001080">sticker</span><span style="color: #000000">)</span>
 </code></pre>
-				<a href="#sending-with-open-wa" id="sending-with-open-wa" style="color: inherit; text-decoration: none;">
-					<h3>Sending With <a href="https://github.com/open-wa/wa-automate-nodejs">Open-Wa</a></h3>
+				<a href="#sending-with-open-wawa-automate-nodejs" id="sending-with-open-wawa-automate-nodejs" style="color: inherit; text-decoration: none;">
+					<h3>Sending With <a href="https://github.com/open-wa/wa-automate-nodejs">Open-Wa/Wa-Automate-Nodejs</a></h3>
 				</a>
 				<pre><code class="language-JS"><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">sendRawWebpAsSticker</span><span style="color: #000000">(</span><span style="color: #001080">jid</span><span style="color: #000000">, </span><span style="color: #001080">sticBuffer</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">))</span>
 </code></pre>
@@ -153,13 +174,37 @@
 					<li class=" ">
 						<a href="modules.html">Modules</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/raw.html">Raw</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker_base.html">Sticker/<wbr>Base</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker_build.html">Sticker/<wbr>Build</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker_exif.html">Sticker/<wbr>Exif</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker_init.html">Sticker/<wbr>Init</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/sticker_main.html">Sticker/<wbr>Main</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/typings.html">typings</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/typings_streamifier.html">typings/streamifier</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/webp.html">webp</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="classes/sticker.html" class="tsd-kind-icon">Sticker</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -170,12 +215,13 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 			</ul>
 		</div>
 	</div>

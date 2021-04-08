@@ -1,14 +1,14 @@
-import { exec } from "child_process"
-import { existsSync, readFile, writeFileSync } from "fs-extra"
-import { tmpdir } from "os"
+import { exec } from 'child_process'
+import { existsSync, readFile, writeFileSync } from 'fs-extra'
+import { tmpdir } from 'os'
 import { promisify } from 'util'
 import webp from '../webp'
 const execute = promisify(exec)
 
 /**
  * Converts image into WebP
- * @param path 
- * @param filename 
+ * @param path
+ * @param filename
  */
 export const convertToWebp = async (path: string, filename = 'converted'): Promise<string> => {
     if (!existsSync(path)) throw new Error(`File does not exist: ${path}`)
@@ -23,8 +23,8 @@ export const convertToWebp = async (path: string, filename = 'converted'): Promi
 
 /**
  * Converts WebP into PNG
- * @param path 
- * @param filename 
+ * @param path
+ * @param filename
  */
 export const convertFromWebp = async (path: string, filename = 'converted-from-webp'): Promise<string> => {
     if (!existsSync(path)) throw new Error(`File does not exist: ${path}`)
@@ -34,8 +34,8 @@ export const convertFromWebp = async (path: string, filename = 'converted-from-w
 
 /**
  * Creates Exif Metadata File
- * @param pack 
- * @param author 
+ * @param pack
+ * @param author
  */
 export const createExif = (pack: string, author: string, filename: string): string => {
     const stickerPackID = 'com.etheral.waifuhub.android.stickercontentprovider b5e7275f-f1de-4137-961f-57becfad34f2'
@@ -72,9 +72,9 @@ export const createExif = (pack: string, author: string, filename: string): stri
 }
 /**
  * Sets Exif metadata to WebP
- * @param pack 
- * @param author 
- * @param file 
+ * @param pack
+ * @param author
+ * @param file
  */
 export const setMetadata = async (pack: string, author: string, file: string): Promise<Buffer> => {
     const exif = createExif(pack, author, `${tmpdir()}/${Math.random().toString(36)}`)

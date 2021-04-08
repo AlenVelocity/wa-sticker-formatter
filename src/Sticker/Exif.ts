@@ -25,9 +25,14 @@ export default class Exif extends Init {
      * @param filename
      */
     async addMetadata(filename: string): Promise<void> {
-        this.exec(`${this.webpmux} -set exif ${this.createExif(this.config?.pack || 'WSF', this.config?.author || 'Made Using', `${this.path}/${Math.random().toString(36)}`)} ${filename} -o ${filename}`)
+        this.exec(
+            `${this.webpmux} -set exif ${this.createExif(
+                this.config?.pack || 'WSF',
+                this.config?.author || 'Made Using',
+                `${this.path}/${Math.random().toString(36)}`
+            )} ${filename} -o ${filename}`
+        )
     }
-
 
     createExif = createExif
 }
