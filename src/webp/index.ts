@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-export default (bin: 'cwebp' | 'gif2webp' | 'webpmux'): string =>
+export default (bin: 'cwebp' | 'gif2webp' | 'webpmux' | 'dwebp'): string =>
     `"${join(
         join(__dirname, '..', '..', 'bin'),
         process.platform === 'darwin'

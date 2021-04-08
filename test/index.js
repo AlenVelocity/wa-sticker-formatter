@@ -1,6 +1,6 @@
 const path = require('path')
 const { writeFile } = require('fs-extra')
-const { Sticker } = require('../lib')
+const { Sticker, createExif, setMetadata } = require('../lib')
 
 async function create(){
 
@@ -12,6 +12,7 @@ async function create(){
     const data = await sticker.get()
     console.log(data)
     writeFile(path.join(__dirname, 'test.webp'), data)
+    await setMetadata('Zelda', 'link', path.join(__dirname, 'test.webp'))
 }
 
 create()
