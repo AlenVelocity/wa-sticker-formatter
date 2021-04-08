@@ -1,6 +1,6 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "",
   "main": "lib",
   "types": "lib",
@@ -13,6 +13,7 @@
     "build": "tsc",
     "doc": "npx typedoc src/**/*.ts",
     "lint": "eslint \"src/**/*.ts\"",
+    "prepare": "npm run build",
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "test": "node --trace-warnings ./test"
   },
