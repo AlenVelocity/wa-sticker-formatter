@@ -15,7 +15,8 @@ export default class Init extends Base {
             ? config
             : {
                   pack: 'Made Using',
-                  author: 'Wa Sticker Formatter'
+                  author: 'Wa Sticker Formatter',
+                  crop: true
               }
         this.data = image
     }

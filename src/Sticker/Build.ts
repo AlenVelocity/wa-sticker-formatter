@@ -53,11 +53,7 @@ export default class Build extends Exif {
             ffmpeg(stream)
                 .inputFormat((this.mime as string) === this.supportedTypes[1] ? 'gif' : 'mp4')
                 .on('error', function (err) {
-                    console.log('An error occurred: ' + err.message)
                     reject(err)
-                })
-                .on('start', function () {
-                    //console.log('Started ' + cmd);
                 })
                 .addOutputOptions(this.outputOptions)
                 .toFormat('webp')
