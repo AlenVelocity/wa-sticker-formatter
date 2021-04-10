@@ -9,16 +9,15 @@
 </div><br/>
 <br/>
 
-*Make sure you have `ImageMagick` installed in your system before using this*
-
-# 🏮 Installation
+# Installation
 ```cmd
 > npm i wa-sticker-formatter
 ```
 
-# 🎋 Usage
+# Usage
 
 ## Importing
+
 ###  💛 JavaScript
 ```JS
 const WSF = require('wa-sticker-formatter')
@@ -28,9 +27,26 @@ const WSF = require('wa-sticker-formatter')
 import * as WSF from 'wa-sticker-formatter'
 ```
 
-## 🎨 Creating Sticker
 
-### Regular Sticker
+## Raw Functions
+
+> Add Metadata to Webp 
+
+```JS
+const webpWithMetadata = await WSF.setMetadata('Pack Title', 'Author', image.webp) //returns the webp buffer with metadata
+```
+
+> Create an exif metadata file
+```TS
+
+const exif = createExif('Pack', 'Author', 'filename') //returns the filename with ".exif"
+```
+
+
+## Creating Sticker 
+**Note: The following methods need `imageMagick Legacy CLI tools` to be installed in your system**
+
+> Regular Sticker
 
 ```JS
 const sticker = new WSF.Sticker('image.png', {})
@@ -39,7 +55,7 @@ const sticBuffer = await sticker.get()
 
 ```
 
-### Non-streched sticker 
+> Non-streched sticker 
 
 ```JS
 const image = 'https://example.com/example.png' 
@@ -49,7 +65,7 @@ const sticBuffer = await sticker.get()
 
 ```
 
-### Non-cropped Animated sticker 
+> Non-cropped Animated sticker 
 ```JS
 
 const sticker = new WSF.Sticker('./image.mp4', { crop: false, animated: true })
@@ -57,7 +73,7 @@ await sticker.build()
 const sticBuffer = await sticker.get()
 
 ```
-### Sticker with Pack and Author Name
+> Sticker with Pack and Author Name
 
 ```JS
 
@@ -66,41 +82,17 @@ await sticker.build()
 const sticBuffer = await sticker.get()
 ```
 
-## Setting Metadata Seperetely
+##  Saving/Sending
 
-```JS
-const sticker = new WSF.Sticker('https://example.com/sample.mp4')
-sticker.setAuthor('Me! 〽') //Now Supports Emojis! 🎊
-sticker.setPack('My Pack! 🍱') 
-await sticker.build()
-const sticBuffer = await sticker.get()
-```
-
-> You can also set metadata using the following function too
-
-```TS
-import { setMetadata } from 'wa-sticker-formatter'
-const sticBuffer = await setMetadata('Pack', 'Author','image.webp')
-```
-
-> Create Manual exif file 
-
-```TS
-import { createExif } from 'wa-sticker-formatter'
-createExif('Pack', 'Author', 'metadata')
-```
-
-## 💌 Saving/Sending
-
-### Saving to File
+> Saving to File
 ```JS
 fs.writeFile('sticker.webp', sticBuffer)
 ```
-### Sending With [Baileys](https://github.com/@adiwajshing/baileys)
+> Sending With [Baileys](https://github.com/adiwajshing/baileys)
 ```JS
 conn.sendMessage(jid, sticBuffer, MessageType.sticker)
 ```
-### Sending With [Open-Wa/Wa-Automate-Nodejs](https://github.com/open-wa/wa-automate-nodejs)
+> Sending With [Open-Wa/Wa-Automate-Nodejs](https://github.com/open-wa/wa-automate-nodejs)
 
 ```JS 
 client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
