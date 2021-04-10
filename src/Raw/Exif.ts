@@ -7,13 +7,12 @@ import webp from '../webp'
 
 const execute = promisify(exec)
 
-
 /**
  * Creates Exif Metadata File
  * @param pack
  * @param author
  */
- export const createExif = (pack: string, author: string, filename: string): string => {
+export const createExif = (pack: string, author: string, filename: string): string => {
     const stickerPackID = 'com.etheral.waifuhub.android.stickercontentprovider b5e7275f-f1de-4137-961f-57becfad34f2'
     const json = {
         'sticker-pack-id': stickerPackID,
@@ -60,9 +59,9 @@ export const setMetadata = async (pack: string, author: string, file: string): P
 
 /**
  * Adds metadata to the given webp buffer and returns the new buffer
- * @param buffer 
- * @param pack 
- * @param author 
+ * @param buffer
+ * @param pack
+ * @param author
  * @returns webpbuffer
  */
 export const addMetadataToWebpBuffer = async (buffer: Buffer, pack: string, author: string): Promise<Buffer> => {
