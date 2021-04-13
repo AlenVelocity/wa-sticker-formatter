@@ -1,1 +1,2 @@
-declare module 'gif-frames' {}
+declare module 'gif-frames' {
+}

@@ -165,7 +165,7 @@ export default class Build extends Exif {
             )
         }
         await this.exec('convert ' + fileNameF + '.png ' + fileName + '.gif -resize 256x256 ' + fileName + '.gif', {})
-        await this.exec(`${this.git2webp} ${fileName}.gif -o ${fileName}.webp`)
+        await this.exec(`${this.gif2webp} ${fileName}.gif -o ${fileName}.webp`)
         return `${fileName}.webp`
     }
 

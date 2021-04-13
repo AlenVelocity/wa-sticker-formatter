@@ -11,9 +11,18 @@ export default class {
      */
     data?: Buffer | string
 
+    /**
+     * Webpmux binary
+     */
     webpmux = webp('webpmux')
+    /**
+     * cwebp binary
+     */
     cwebp = webp('cwebp')
-    git2webp = webp('gif2webp')
+    /**
+     * 
+     */
+    gif2webp = webp('gif2webp')
 
     /**
      * Sticker Config
