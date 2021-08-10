@@ -9,7 +9,7 @@ export default class StickerMetadata implements Partial<IStickerConfig> {
         public id = Utils.generateStickerID()
     ) {}
 
-    from = (object: Partial<this>) => {
+    from = (object: Partial<this>): StickerMetadata => {
         return new StickerMetadata(object.pack, object.author, object.categories, object.id)
     }
 
@@ -36,6 +36,7 @@ export default class StickerMetadata implements Partial<IStickerConfig> {
     }
 
     toJSON = (): IStickerConfig => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const obj: any = {}
         Object.keys(this)
             .filter((key) => typeof this[key as keyof this] !== 'function')

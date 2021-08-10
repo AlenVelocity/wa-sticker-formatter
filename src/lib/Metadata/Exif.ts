@@ -23,17 +23,18 @@ export default class Exif {
         return exif
     }
 
-    add = async (image: Buffer | Image): Promise<Buffer> => {
+    add = async (image: string | Buffer | Image): Promise<Buffer> => {
+        console.log(image)
         const exif = this.exif || this.build()
         image =
             image instanceof Image
                 ? image
                 : await (async () => {
-                      const image = new Image()
-                      await image.loadBuffer(image)
-                      return image
+                      const img = new Image()
+                      await img.load(image)
+                      return img
                   })()
         image.exif = exif
-        return await image.saveBuffer()
+        return await image.save(null)
     }
 }
