@@ -1,4 +1,4 @@
-import { IRawMetadata, Metadata } from '../Types'
+import { IRawMetadata, Metadata } from '../../Types'
 
 export default class RawMetadata implements IRawMetadata {
     emojis: string[]

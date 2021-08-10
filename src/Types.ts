@@ -1,5 +1,5 @@
-import StickerMetadata from './Metadata/StickerMetadata'
-import StickerOptions from './Metadata/StickerOptions'
+import StickerMetadata from './lib/Metadata/StickerMetadata'
+import StickerOptions from './lib/Metadata/StickerOptions'
 
 /** Sticker metadata config */
 export interface IStickerConfig {

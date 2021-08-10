@@ -1,5 +1,5 @@
 import StickerMetadata from './StickerMetadata'
-import { IStickerOptions } from '../Types'
+import { IStickerOptions } from '../../Types'
 
 export default class StickerOptions extends StickerMetadata implements IStickerOptions {
     constructor(public crop = true, ...args: ConstructorParameters<typeof StickerMetadata>) {

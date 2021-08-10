@@ -1,5 +1,5 @@
-import { Categories, IStickerConfig } from '../Types'
-import Utils from '../Utils'
+import { Categories, IStickerConfig } from '../../Types'
+import Utils from '../../Utils'
 
 export default class StickerMetadata implements Partial<IStickerConfig> {
     constructor(
