@@ -1,5 +1,5 @@
-import StickerMetadata from './Options/StickerMetadata'
-import StickerOptions from './Options/StickerOptions'
+import StickerMetadata from './Metadata/StickerMetadata'
+import StickerOptions from './Metadata/StickerOptions'
 
 /** Sticker metadata config */
 export interface IStickerConfig {
@@ -16,6 +16,14 @@ export interface IStickerConfig {
 export interface IStickerOptions extends IStickerConfig {
     crop: boolean
 }
+
+export interface IRawMetadata {
+    emojis: string[]
+    'sticker-pack-id': string
+    'sticker-pack-name': string
+    'sticker-pack-publisher': string
+}
+
 export type Metadata = IStickerConfig | IStickerOptions | StickerMetadata | StickerOptions
 
 type Love =
