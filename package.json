@@ -2,11 +2,10 @@
   "name": "wa-sticker-formatter",
   "version": "3.6.0",
   "description": "",
-  "main": "lib",
-  "types": "lib",
+  "main": "dist",
+  "types": "dist",
   "files": [
-    "lib",
-    "bin"
+    "dist"
   ],
   "scripts": {
     "build": "tsc",
