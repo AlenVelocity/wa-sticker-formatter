@@ -15,5 +15,5 @@
   },
   "include": [
     "src/**/*"
-  ]
+, "test.mjs"  ]
 }
