@@ -1,3 +1,6 @@
+import StickerMetadata from './Options/StickerMetadata'
+import StickerOptions from './Options/StickerOptions'
+
 /** Sticker metadata config */
 export interface IStickerConfig {
     /** Sticker Pack title*/
@@ -13,6 +16,7 @@ export interface IStickerConfig {
 export interface IStickerOptions extends IStickerConfig {
     crop: boolean
 }
+export type Metadata = IStickerConfig | IStickerOptions | StickerMetadata | StickerOptions
 
 type Love =
     | '❤'
