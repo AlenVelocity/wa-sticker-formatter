@@ -46,3 +46,7 @@ export class Sticker {
      */
     get = this.build
 }
+
+export const createSticker = async (...args: ConstructorParameters<typeof Sticker>): Promise<Buffer> => {
+    return await new Sticker(...args).build()
+}
