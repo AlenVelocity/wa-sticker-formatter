@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "doc": "npx typedoc src/**/*.ts",
+    "doc": "typedoc",
     "lint": "eslint \"src/**/*.ts\"",
     "prepare": "npm run build",
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
