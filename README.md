@@ -22,7 +22,7 @@ Let's go through them one by one.
 
 ### 1. Author and Pack Title
 
-<img src=".github/assets/metadata.jpeg" alt="wsf" width=256 />
+<a href="https://ibb.co/MhyzMwJ"><img src="https://i.ibb.co/9vmxsKd/metadata.jpg" alt="metadata" border="0" width=256></a>
 
 The text on bold is the pack title and the rest is the author.
 This is actually [Exif](https://en.wikipedia.org/wiki/Exif) Metadata embedded in the WebP file.
