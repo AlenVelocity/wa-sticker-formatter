@@ -7,7 +7,9 @@ const imagesToWebp = async (filename: string): Promise<Buffer> => {
         const name = `${tmpdir()}/${Math.random().toString(36)}.webp`
         Ffmpeg(filename)
             .outputOption('-lavfi split[v],palettegen,[v]paletteuse')
-            .outputFPS(15)
+            .outputOption('-vcodec libwebp')
+            .outputFPS(10)
+            .loop(0)
             .save(name)
             .on('end', () => resolve(name))
     })

@@ -9,20 +9,19 @@ import imagesToWebp from './imagesToWebp'
 
 const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'default' = 'default'): Promise<Buffer> => {
     const sticker = await convertSticker(data, mime, type)
-    return Buffer.isBuffer(sticker)
-        ? sticker
-        : await (async () => {
-              const filename = `${tmpdir()}/${Math.random()}.webp`
-              await sticker.toFile(filename)
-              return await readFile(filename)
-          })()
+    return await sticker
+        .toFormat('webp')
+        .webp({
+            quality: 50
+        })
+        .toBuffer()
 }
 
 const convertSticker = async (
     data: Buffer,
     mime: string,
     type: 'crop' | 'full' | 'default' = 'default'
-): Promise<sharp.Sharp | Buffer> => {
+): Promise<sharp.Sharp> => {
     const isVideo = mime.startsWith('video')
     const image = isVideo ? await videoToGif(data) : data
     if ((isVideo || mime.includes('gif')) && type !== 'default') {
@@ -44,8 +43,7 @@ const convertSticker = async (
                 return file
             })
         )
-        //TODO: Find a way to convert GIF with transparent backgrouns
-        return await imagesToWebp(filename.replace('{}', '%d'))
+        return await convertSticker(await imagesToWebp(filename.replace('{}', '%d')), 'image/webp')
     }
     const img = sharp(image, { pages: -1 })
     if (type === 'crop') img.resize(512, 512)
