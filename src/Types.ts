@@ -1,20 +1,20 @@
-import StickerMetadata from './lib/Metadata/StickerMetadata'
-import StickerOptions from './lib/Metadata/StickerOptions'
-
 /** Sticker metadata config */
 export interface IStickerConfig {
     /** Sticker Pack title*/
-    pack: string
+    pack?: string
     /** Sticker Pack Author*/
-    author: string
+    author?: string
     /** Sticker Pack ID*/
-    id: string
+    id?: string
     /** Sticker Category*/
-    categories: Categories[]
+    categories?: Categories[]
 }
 
 export interface IStickerOptions extends IStickerConfig {
-    crop: boolean
+    /** How you want your sticker to look like
+     * Can be crop or full. Defaults to 'default' (no changes)
+     */
+    type?: 'default' | 'crop' | 'full'
 }
 
 export interface IRawMetadata {
@@ -24,7 +24,7 @@ export interface IRawMetadata {
     'sticker-pack-publisher': string
 }
 
-export type Metadata = IStickerConfig | IStickerOptions | StickerMetadata | StickerOptions
+export type Metadata = IStickerConfig | IStickerOptions
 
 type Love =
     | '❤'
