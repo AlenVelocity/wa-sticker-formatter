@@ -66,7 +66,7 @@ const convertSticker = async (
                     r: 255,
                     g: 255,
                     b: 255,
-                    alpha: 0.4
+                    alpha: 0
                 }
             }
         })()
