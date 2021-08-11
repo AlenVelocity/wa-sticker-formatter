@@ -1,7 +1,9 @@
-import { Categories, IStickerConfig } from '../../Types'
+import { Categories, IStickerConfig, IStickerOptions } from '../../Types'
 import Utils from '../../Utils'
 
-export default class StickerMetadata implements Partial<IStickerConfig> {
+export default class StickerMetadata implements IStickerOptions {
+    crop = false
+    full = false
     constructor(
         public pack = '',
         public author = '',
@@ -25,6 +27,18 @@ export default class StickerMetadata implements Partial<IStickerConfig> {
 
     setId = (id: string): this => {
         this.id = id
+        return this
+    }
+
+    setCrop = (value: boolean): this => {
+        this.crop = value
+        this.full = !value
+        return this
+    }
+
+    setFull = (value: boolean): this => {
+        this.crop = !value
+        this.full = value
         return this
     }
 
