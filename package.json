@@ -2,12 +2,10 @@
   "name": "wa-sticker-formatter",
   "version": "3.6.0",
   "description": "",
-  "main": "lib",
-  "types": "lib",
+  "main": "dist",
+  "types": "dist",
   "files": [
-    "lib",
-    "bin",
-    "test"
+    "dist"
   ],
   "scripts": {
     "build": "tsc",
@@ -34,26 +32,22 @@
   },
   "issues": "https://github.com/Alensaito1/wa-sticker-formatter",
   "devDependencies": {
-    "@types/fluent-ffmpeg": "^2.1.16",
-    "@types/fs-extra": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "@types/node": "^14.14.37",
-    "@types/qr-image": "^3.2.3",
-    "eslint": "^7.23.0",
-    "prettier": "^2.2.1",
-    "typescript": "^4.2.3",
-    "typedoc": "^0.20.32"
+    "@types/fluent-ffmpeg": "^2.1.18",
+    "@types/node": "^16.4.13",
+    "@types/sharp": "^0.28.5",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "^7.32.0",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "file-type": "^16.3.0",
+    "file-type": "^16.5.3",
     "fluent-ffmpeg": "^2.1.2",
-    "fs-extra": "^9.1.0",
-    "gif-frames": "^1.0.1",
-    "image-size": "^0.9.7",
-    "jimp": "^0.16.1",
-    "mimetypes": "^0.1.1",
-    "streamifier": "^0.1.1"
+    "gif-frames": "github:alensaito1/gif-frames",
+    "image-size": "^1.0.0",
+    "node-webpmux": "^3.1.0",
+    "sharp": "^0.28.3"
   }
 }

@@ -1,4 +1,0 @@
-libwebp v1.1.0
-
-https://developers.google.com/speed/webp/download
-https://storage.googleapis.com/downloads.webmproject.org/releases/webp/index.html
