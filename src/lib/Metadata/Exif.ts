@@ -24,7 +24,6 @@ export default class Exif {
     }
 
     add = async (image: string | Buffer | Image): Promise<Buffer> => {
-        console.log(image)
         const exif = this.exif || this.build()
         image =
             image instanceof Image
