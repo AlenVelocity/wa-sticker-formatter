@@ -8,10 +8,13 @@ import convert from './lib/convert'
 import Exif from './lib/Metadata/Exif'
 
 export class Sticker {
-    constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions>) {
+    constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
         this.metadata.author = this.metadata.author || ''
         this.metadata.pack = this.metadata.pack || ''
         this.metadata.id = this.metadata.id || Utils.generateStickerID()
+        this.metadata.type = ['default', 'crop', 'full'].includes(this.metadata.type as string)
+            ? this.metadata.type
+            : 'default'
     }
 
     private _parse = async (): Promise<Buffer> =>
@@ -27,9 +30,19 @@ export class Sticker {
         if (!type) throw new Error('Invalid Buffer Instance')
         return type.mime
     }
+
+    /**
+     * Builds the sticker
+     */
     build = async (): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        return await new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, !!this.metadata.crop))
+        return await new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, this.metadata.type))
     }
+
+    /**
+     * @deprecated
+     * Use the `Sticker.build()` method instead
+     */
+    get = this.build
 }
