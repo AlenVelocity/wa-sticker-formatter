@@ -6,6 +6,8 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 
 </div>
 
+# ⚠️ **WARNING: BREAKING CHANGES! PLEASE READ README BEFORE SWITCHING FROM 3.x to 4.x**
+
 # Installation
 
 ```cmd
