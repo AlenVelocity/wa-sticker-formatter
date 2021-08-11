@@ -45,6 +45,7 @@
     "axios": "^0.21.1",
     "file-type": "^16.5.3",
     "fluent-ffmpeg": "^2.1.2",
+    "gif-frames": "github:alensaito1/gif-frames",
     "image-size": "^1.0.0",
     "node-webpmux": "^3.1.0",
     "sharp": "^0.28.3"
