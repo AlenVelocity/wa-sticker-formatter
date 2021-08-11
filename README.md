@@ -1,102 +1,94 @@
-<div align="center">
-<img src="https://wallpapercave.com/wp/wp8493901.png" alt="WATCIKER" width="500" />
+# Wa-Sticker-Formatter
 
-# _**WA-STICKER-FORMATTER**_
+<img src="https://img.icons8.com/color/96/000000/whatsapp--v5.png" alt="wsf" align="right" />
 
-> Whatsapp Sticker Creator/Formatter!
-> 
->
-</div><br/>
-<br/>
+Wa-Sticker-Formatter is a simple tool which allows you to create and format WhatsApp Stickers.
+
+</div>
 
 # Installation
+
 ```cmd
 > npm i wa-sticker-formatter
 ```
 
+# Metadata
+
+Before getting started, you need to know some basic information about WhatsApp Sticker Metadata.
+
+In WhatsApp, stickers have thier own metadata embedded in the WebP file. They hold info like the author, the title or pack name, the category.
+
+Let's go through them one by one.
+
+### 1. Author and Pack Title
+
+<img src=".github/assets/metadata.jpeg" alt="wsf" width=256 />
+
+The text on bold is the pack title and the rest is the author.
+This is actually [Exif](https://en.wikipedia.org/wiki/Exif) Metadata embedded in the WebP file.
+
+### 2 Sticker Category
+
+This is an array of Emojis. [Learn More](https://github.com/WhatsApp/stickers/wiki/Tag-your-stickers-with-Emojis)
+
 # Usage
 
-## Importing
+Wa-Sticker-Formatter provides two ways to create stickers.
+The paramers are the same for both.
 
-###  💛 JavaScript
-```JS
-const WSF = require('wa-sticker-formatter')
-```
-### 💙 TypeScript
-```TS 
-import * as WSF from 'wa-sticker-formatter'
-```
+First is the Buffer, URL or File path of static image, GIF or Video. The second is the options. GIFs and Videos will output an animated WebP file.
 
+Sticker options are:
 
-## Raw Functions
+`pack` - The pack name.<br>
+`author` - The author name.<br>
+`type` - The sticker type. Can be 'crop' or 'full' or undefined (default).<br>
+`categories` - The sticker category. Can be an array of Emojis or undefined (default).<br>
+`id` - The sticker id. If this property is not defined, it will be generated.<br>
 
-> Add Metadata to Webp 
+# Examples
 
-```JS
-const webpWithMetadata = await WSF.setMetadata('Pack Title', 'Author', image.webp) //returns the webp buffer with metadata
-```
+## 1. Using the `Sticker` Class
 
-> Create an exif metadata file
+Example:
+
 ```TS
+import { Sticker } from 'wa-sticker-formatter'
+// const { Sticker } = require('wa-sticker-formatter')
 
-const exif = createExif('Pack', 'Author', 'filename') //returns the filename with ".exif"
-```
+const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif'
 
-
-## Creating Sticker 
-**Note: The following methods need `imageMagick Legacy CLI tools` to be installed in your system**
-
-> Regular Sticker
-
-```JS
-const sticker = new WSF.Sticker('image.png', {})
-await sticker.build()
-const sticBuffer = await sticker.get()
-
-```
-
-> Non-streched sticker 
-
-```JS
-const image = 'https://example.com/example.png' 
-const sticker = new WSF.Sticker(image, { crop: false })
-await sticker.build()
-const sticBuffer = await sticker.get()
+(async () => {
+    const stickerMetadata = {
+        type: 'full',
+        pack: 'watson',
+        author: 'amelia',
+        categories: [
+            '🌹'
+        ]
+    }
+    const sticker = await new Sticker(image, stickerMetadata).build()
+})
 
 ```
 
-> Non-cropped Animated sticker 
-```JS
+## 2. Using the `createSticker` function
 
-const sticker = new WSF.Sticker('./image.mp4', { crop: false, animated: true })
-await sticker.build()
-const sticBuffer = await sticker.get()
+```TS
+import { createSticker } from 'wa-sticker-formatter'
+// const { createSticker } = require('wa-sticker-formatter')
 
+const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif' // Supports Buffer, URLs and filepath of Static Images, GIFs and Videos
+
+(async () => {
+    const stickerMetadata = {
+        type: 'full', //can be full or crop
+        pack: 'watson',
+        author: 'amelia',
+        categories: [
+            '🌹'
+        ]
+    }
+    const sticker = await createSticker(image, stickerMetadata)
+})
 ```
-> Sticker with Pack and Author Name
-
-```JS
-
-const sticker = new WSF.Sticker('https://example.com/sample.mp4', { crop: false, animated: true, pack: 'Pack', author: 'AUTHOR' })
-await sticker.build()
-const sticBuffer = await sticker.get()
-```
-
-##  Saving/Sending
-
-> Saving to File
-```JS
-fs.writeFile('sticker.webp', sticBuffer)
-```
-> Sending With [Baileys](https://github.com/adiwajshing/baileys)
-```JS
-conn.sendMessage(jid, sticBuffer, MessageType.sticker)
-```
-> Sending With [Open-Wa/Wa-Automate-Nodejs](https://github.com/open-wa/wa-automate-nodejs)
-
-```JS 
-client.sendRawWebpAsSticker(jid, sticBuffer.toString('base64'))
-```
-
-
-
