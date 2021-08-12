@@ -1,51 +1,25 @@
 import sharp from 'sharp'
 import videoToGif from './videoToGif'
 import sizeOf from 'image-size'
-import gifFrames from 'gif-frames'
+import { writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
-import { createWriteStream } from 'fs'
-import { readFile } from 'fs/promises'
-import imagesToWebp from './imagesToWebp'
+import cropGif from './cropGif'
 
 const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'default' = 'default'): Promise<Buffer> => {
-    const sticker = await convertSticker(data, mime, type)
-    return await sticker
-        .toFormat('webp')
-        .webp({
-            quality: 50
-        })
-        .toBuffer()
-}
-
-const convertSticker = async (
-    data: Buffer,
-    mime: string,
-    type: 'crop' | 'full' | 'default' = 'default'
-): Promise<sharp.Sharp> => {
     const isVideo = mime.startsWith('video')
     const image = isVideo ? await videoToGif(data) : data
-    if ((isVideo || mime.includes('gif')) && type !== 'default') {
-        const frames = await gifFrames({
-            url: image,
-            frames: 'all',
-            cumulative: true
-        })
-        const filename = `${tmpdir()}/${Math.random().toString(36)}_{}.png`
-        await Promise.all(
-            frames.map(async (gif, index) => {
-                const file = filename.replace('{}', `${index}`)
-                const stream = createWriteStream(file)
-                gif.getImage().pipe(stream)
-                await new Promise((resolve) => {
-                    stream.on('finish', resolve)
-                })
-                await ((await convertSticker(await readFile(file), 'image/png', type)) as sharp.Sharp).toFile(file)
-                return file
-            })
-        )
-        return await convertSticker(await imagesToWebp(filename.replace('{}', '%d')), 'image/webp')
+    if (isVideo || (mime.includes('gif') && type === 'crop')) {
+        const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
+        await writeFile(filename, image)
+        return cropGif(filename)
     }
-    const img = sharp(image, { pages: -1 })
+
+    const img = sharp(image, { pages: -1, animated: isVideo || mime.includes('gif') })
+        .toFormat('webp')
+        .webp({
+            loop: 0,
+            quality: 50
+        })
     if (type === 'crop') img.resize(512, 512)
     if (type === 'full') {
         const options = ((): sharp.ExtendOptions => {
@@ -71,7 +45,7 @@ const convertSticker = async (
         img.extend(options)
     }
 
-    return img
+    return await img.toBuffer()
 }
 
 export default convert
