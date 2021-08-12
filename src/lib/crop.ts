@@ -2,7 +2,7 @@ import Ffmpeg from 'fluent-ffmpeg'
 import { readFile } from 'fs/promises'
 import { tmpdir } from 'os'
 
-const cropGif = async (filename: string): Promise<Buffer> => {
+const crop = async (filename: string): Promise<Buffer> => {
     const file = await new Promise<string>((resolve) => {
         const name = `${tmpdir()}/${Math.random().toString(36)}.webp`
         Ffmpeg(filename)
@@ -29,4 +29,4 @@ const cropGif = async (filename: string): Promise<Buffer> => {
     return await readFile(file)
 }
 
-export default cropGif
+export default crop
