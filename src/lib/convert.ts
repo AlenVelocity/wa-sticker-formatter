@@ -3,23 +3,20 @@ import videoToGif from './videoToGif'
 import sizeOf from 'image-size'
 import { writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
-import cropGif from './cropGif'
+import crop from './crop'
 
 const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'default' = 'default'): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
     const image = isVideo ? await videoToGif(data) : data
-    if (isVideo || (mime.includes('gif') && type === 'crop')) {
+    if ((isVideo || mime.includes('gif')) && type === 'crop') {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
-        return cropGif(filename)
+        return convert(await crop(filename), 'image/webp', 'default')
     }
 
     const img = sharp(image, { pages: -1, animated: isVideo || mime.includes('gif') })
         .toFormat('webp')
-        .webp({
-            loop: 0,
-            quality: 50
-        })
+
     if (type === 'crop') img.resize(512, 512)
     if (type === 'full') {
         const options = ((): sharp.ExtendOptions => {
@@ -45,7 +42,11 @@ const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'defa
         img.extend(options)
     }
 
-    return await img.toBuffer()
+    return await img.webp({
+            loop: 0,
+            quality: 15,
+            lossless: false
+        }).toBuffer()
 }
 
 export default convert
