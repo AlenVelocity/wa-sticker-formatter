@@ -10,7 +10,7 @@ const videoToGif = async (data: Buffer): Promise<Buffer> => {
     await new Promise((resolve) => {
         ffmpeg(video).outputOption('-vf scale=320:-1').save(gif).on('end', resolve)
     })
-
+    
     const buffer = await readFile(gif)
     ;[video, gif].forEach((file) => unlink(file))
     return buffer
