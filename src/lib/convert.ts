@@ -14,14 +14,14 @@ const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'defa
         return convert(await crop(filename), 'image/webp', 'default')
     }
 
-    const img = sharp(image, { pages: -1, animated: isVideo || mime.includes('gif') })
-        .toFormat('webp')
+    const img = sharp(image, { animated: true })
 
     if (type === 'crop') img.resize(512, 512)
+
     if (type === 'full') {
+        let { height, width } = sizeOf(image)
+        ;[height, width] = [height, width].map((x) => x || 0)
         const options = ((): sharp.ExtendOptions => {
-            let { height, width } = sizeOf(image)
-            ;[height, width] = [height || 0, width || 0]
             const [horizontal, vertical] = [
                 height > width ? (height - width) / 2 : 0,
                 width > height ? (width - height) / 2 : 0
@@ -42,11 +42,13 @@ const convert = async (data: Buffer, mime: string, type: 'crop' | 'full' | 'defa
         img.extend(options)
     }
 
-    return await img.webp({
+    return await img
+        .webp({
             loop: 0,
             quality: 15,
             lossless: false
-        }).toBuffer()
+        })
+        .toBuffer()
 }
 
 export default convert
