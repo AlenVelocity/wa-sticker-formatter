@@ -1,5 +1,5 @@
 import { existsSync } from 'fs'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { IStickerConfig, IStickerOptions } from './Types'
 import axios from 'axios'
 import Utils from './Utils'
@@ -12,6 +12,7 @@ export class Sticker {
         this.metadata.author = this.metadata.author || ''
         this.metadata.pack = this.metadata.pack || ''
         this.metadata.id = this.metadata.id || Utils.generateStickerID()
+        this.metadata.quality = this.metadata.quality || 100
         this.metadata.type = ['default', 'crop', 'full'].includes(this.metadata.type as string)
             ? this.metadata.type
             : 'default'
@@ -37,7 +38,14 @@ export class Sticker {
     build = async (): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        return await new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, this.metadata.type))
+        return await new Exif(this.metadata as IStickerConfig).add(
+            await convert(buffer, mime, this.metadata.type, this.metadata.quality)
+        )
+    }
+
+    toFile = async (filename = `${this.metadata.pack}-${this.metadata.author}.webp`): Promise<string> => {
+        await writeFile(filename, await this.build())
+        return filename
     }
 
     /**
