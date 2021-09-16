@@ -21,33 +21,30 @@ const convert = async (
 
     const img = sharp(image, { animated: true }).toFormat('webp')
 
-    if (type === 'crop') img.resize(512, 512, { fit: 'contain' })
+    if (type === 'crop')
+        img.resize(512, 512, {
+            fit: 'cover'
+        })
 
     if (type === 'full') {
-        const { height = 0, width = 0, pages = 1 } = await img.metadata()
-        const pageHeight = height / pages
-        if (height !== width) {
-            const [sub, compare] = [Math.abs(pageHeight - width), pageHeight > width]
-            const [horizontal, vertical] = [compare ? sub : 0, compare ? 0 : sub].map((x) => Math.round(x / 2))
-            return await img
-                .webp({
-                    quality,
-                    pageHeight: Math.max(pageHeight, width)
-                })
-                .extend({
-                    top: vertical,
-                    left: horizontal,
-                    right: horizontal,
-                    bottom: vertical,
-                    background: {
-                        r: 255,
-                        g: 255,
-                        b: 255,
-                        alpha: 0
-                    }
-                })
-                .toBuffer()
-        }
+        const { pages = 1 } = await img.metadata()
+        const width = 512
+        return await img
+            .resize({
+                width,
+                height: width * pages,
+                fit: 'contain',
+                background: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    alpha: 0
+                }
+            })
+            .webp({
+                pageHeight: width
+            })
+            .toBuffer()
     }
 
     return await img
