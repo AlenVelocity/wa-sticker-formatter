@@ -3,7 +3,7 @@ import { Sticker } from '../dist/index.js'
 (async () => {
 
     console.log('\n---\n')
-    console.log('Full example')
+    console.log('Example')
     console.log('---\n')
     const images = {
         static: {
@@ -15,7 +15,7 @@ import { Sticker } from '../dist/index.js'
             landscape: 'https://c.tenor.com/2RdLoyV5VPsAAAAC/ayame-nakiri.gif'
         }
     }
-    const type = 'full'
+    const type = 'default'
     const getOptions = (pack = '', author = '') => ({
         pack,
         type,
