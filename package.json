@@ -8,11 +8,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p .",
     "doc": "typedoc",
     "lint": "eslint \"src/**/*.ts\"",
-    "prepare": "npm run build",
-    "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
+    "prepublish": "npm run build",
+    "fmt": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "test": "mocha --timeout 60000 -r ts-node/register \"tests/**/*.test.ts\""
   },
   "keywords": [
