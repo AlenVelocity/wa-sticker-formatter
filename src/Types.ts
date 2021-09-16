@@ -1,3 +1,5 @@
+import sharp from 'sharp'
+
 /** Sticker metadata config */
 export interface IStickerConfig {
     /** Sticker Pack title*/
@@ -15,6 +17,11 @@ export interface IStickerOptions extends IStickerConfig {
      * Can be crop or full. Defaults to 'default' (no changes)
      */
     type?: 'default' | 'crop' | 'full'
+
+    /**
+     * Quality of the output webp image. Must be an integer from 0 to 100 (defaults to 100
+     */
+    quality?: sharp.WebpOptions['quality']
 }
 
 export interface IRawMetadata {
