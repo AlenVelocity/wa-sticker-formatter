@@ -43,7 +43,11 @@ export class Sticker {
         )
     }
 
-    toFile = async (filename = `${this.metadata.pack}-${this.metadata.author}.webp`): Promise<string> => {
+    get defaultFilename(): string {
+        return `./${this.metadata.pack}-${this.metadata.author}.webp`
+    }
+
+    toFile = async (filename = this.defaultFilename): Promise<string> => {
         await writeFile(filename, await this.build())
         return filename
     }
