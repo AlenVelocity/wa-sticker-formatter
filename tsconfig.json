@@ -15,5 +15,9 @@
   },
   "include": [
     "src/**/*"
-, "test.mjs"  ]
+  ],
+  "exclude": [
+    "node_modules",
+    "tests/**/*"
+  ]
 }
