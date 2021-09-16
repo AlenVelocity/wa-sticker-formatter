@@ -1,4 +1,4 @@
-import { Sticker } from './dist/index.js'
+import { Sticker } from '../dist/index.js'
 
 (async () => {
     const images = {
