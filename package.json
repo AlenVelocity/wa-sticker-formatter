@@ -13,7 +13,7 @@
     "lint": "eslint \"src/**/*.ts\"",
     "prepare": "npm run build",
     "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
-    "test": "node --trace-warnings ./test"
+    "test": "mocha --timeout 60000 -r ts-node/register \"tests/**/*.test.ts\""
   },
   "keywords": [
     "whatsapp",
