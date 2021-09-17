@@ -62,7 +62,7 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
 
 (async () => {
     const stickerMetadata = {
-        type: tickerTypes.CROPPED,
+        type: StickerTypes.CROPPED,
         pack: 'watson',
         author: 'amelia',
         categories: [
