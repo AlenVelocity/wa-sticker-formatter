@@ -6,6 +6,7 @@ import Utils from './Utils'
 import { fromBuffer } from 'file-type'
 import convert from './lib/convert'
 import Exif from './lib/Metadata/Exif'
+import { StickerTypes } from './lib/Metadata/StickerTypes'
 
 export class Sticker {
     constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
@@ -13,9 +14,9 @@ export class Sticker {
         this.metadata.pack = this.metadata.pack || ''
         this.metadata.id = this.metadata.id || Utils.generateStickerID()
         this.metadata.quality = this.metadata.quality || 100
-        this.metadata.type = ['default', 'crop', 'full'].includes(this.metadata.type as string)
+        this.metadata.type = Object.values(StickerTypes).includes(this.metadata.type as StickerTypes)
             ? this.metadata.type
-            : 'default'
+            : StickerTypes.DEFAULT
     }
 
     private _parse = async (): Promise<Buffer> =>
@@ -34,12 +35,14 @@ export class Sticker {
 
     /**
      * Builds the sticker
+     * @param {string} [type] - How you want your sticker to look like
+     * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
      */
-    build = async (): Promise<Buffer> => {
+    build = async (type: StickerTypes = this.metadata.type || StickerTypes.DEFAULT): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
         return await new Exif(this.metadata as IStickerConfig).add(
-            await convert(buffer, mime, this.metadata.type, this.metadata.quality)
+            await convert(buffer, mime, type, this.metadata.quality)
         )
     }
 
@@ -47,6 +50,11 @@ export class Sticker {
         return `./${this.metadata.pack}-${this.metadata.author}.webp`
     }
 
+    /**
+     * Saves the sticker to a file
+     * @param [filename] - Filename to save the sticker to
+     * @returns filename
+     */
     toFile = async (filename = this.defaultFilename): Promise<string> => {
         await writeFile(filename, await this.build())
         return filename
