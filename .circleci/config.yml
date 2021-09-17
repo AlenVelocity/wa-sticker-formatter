@@ -1,20 +1,9 @@
-version: 2.1
-executors:
-  my-custom-executor:
-    docker:
-      - image: cimg/base:stable
-      
-jobs:
-  tests:
-    executor: my-custom-executor
-    steps:
-      - checkout
-      - run: |
-          npm ci
-          npm run build
-          npm test
-
+version: '2.1'
+orbs:
+  node: circleci/node@x.y
 workflows:
-  my-custom-workflow:
+  run-npm-command:
     jobs:
-      - tests
+      - node/run:
+          npm-run: build
+          npm-run: test
