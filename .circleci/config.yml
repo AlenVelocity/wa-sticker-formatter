@@ -5,7 +5,7 @@ executors:
       - image: cimg/base:stable
       
 jobs:
-  build-&-tests:
+  tests:
     executor: my-custom-executor
     steps:
       - checkout
