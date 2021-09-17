@@ -12,12 +12,12 @@ const convert = async (
     quality = 100
 ): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
-    const image = isVideo ? await videoToGif(data) : data
+    let image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
     if (isAnimated && type === 'crop') {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
-        return convert(await crop(filename), 'image/webp', StickerTypes.DEFAULT)
+        ;[image, type] = [await crop(filename), StickerTypes.DEFAULT]
     }
 
     const img = sharp(image, { animated: true }).toFormat('webp')
