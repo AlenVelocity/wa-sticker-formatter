@@ -28,23 +28,20 @@ const convert = async (
 
     if (type === 'full') {
         const { pages = 1 } = await img.metadata()
-        const width = 512
-        return await img
-            .resize({
-                width,
-                height: width * pages,
-                fit: 'contain',
-                background: {
-                    r: 0,
-                    g: 0,
-                    b: 0,
-                    alpha: 0
-                }
-            })
-            .webp({
-                pageHeight: width
-            })
-            .toBuffer()
+        const pageHeight = 512
+        img.resize({
+            width: pageHeight,
+            height: pageHeight * pages,
+            fit: 'contain',
+            background: {
+                r: 0,
+                g: 0,
+                b: 0,
+                alpha: 0
+            }
+        }).webp({
+            pageHeight
+        })
     }
 
     return await img
