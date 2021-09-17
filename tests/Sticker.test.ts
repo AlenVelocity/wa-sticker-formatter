@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path='../src/lib/node-webmux' />
 import { strict as assert } from 'assert'
-import Sticker from '../src'
+import Sticker, { StickerTypes } from '../src'
 import { Image } from 'node-webpmux'
 import sizeOf from 'image-size'
 
@@ -17,7 +17,7 @@ const images = {
 }
 
 describe('Sticker', () => {
-
+    console.log(StickerTypes)
     describe('Static Stickers', () => {
         it('should create a static sticker', async () => {
             const sticker = new Sticker(images.static.potrait)
@@ -27,7 +27,7 @@ describe('Sticker', () => {
 
         it('should create a cropped sticker with size 512x512', async () => {
             const sticker = new Sticker(images.static.potrait, {
-                type: 'crop'
+                type: StickerTypes.CROPPED
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)
@@ -37,7 +37,7 @@ describe('Sticker', () => {
 
         it('should create a static sticker same height and width', async () => {
             const sticker = new Sticker(images.static.landscape, {
-                type: 'full'
+                type: StickerTypes.FULL
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)
@@ -54,7 +54,7 @@ describe('Sticker', () => {
 
         it('should create an animated sticker with size 512x512', async () => {
             const sticker = new Sticker(images.animated.potrait, {
-                type: 'crop'
+                type: StickerTypes.CROPPED
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)
@@ -64,7 +64,7 @@ describe('Sticker', () => {
 
         it('should create an animated sticker same height and width', async () => {
             const sticker = new Sticker(images.animated.potrait, {
-                type: 'full'
+                type: StickerTypes.FULL
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)
