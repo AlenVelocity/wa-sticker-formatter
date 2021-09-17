@@ -46,7 +46,8 @@ const convert = async (
 
     return await img
         .webp({
-            quality
+            quality,
+            lossless: false
         })
         .toBuffer()
 }
