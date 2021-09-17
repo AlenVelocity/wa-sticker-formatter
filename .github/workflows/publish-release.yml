@@ -20,7 +20,6 @@ jobs:
       uses: actions/setup-node@v2.1.1
     
     - name: Setup ffmpeg
-      uses: actions/checkout@v2
       uses: FedericoCarboni/setup-ffmpeg@v1
       with:
       token: ${{ secrets.GITHUB_TOKEN }}
