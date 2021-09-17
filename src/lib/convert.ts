@@ -11,7 +11,6 @@ const convert = async (
     type: StickerTypes = StickerTypes.DEFAULT,
     quality = 100
 ): Promise<Buffer> => {
-    console.log('convert', mime, type, quality)
     const isVideo = mime.startsWith('video')
     const image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
