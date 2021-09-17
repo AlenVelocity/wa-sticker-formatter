@@ -3,20 +3,22 @@ import videoToGif from './videoToGif'
 import { writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import crop from './crop'
+import { StickerTypes } from './Metadata/StickerTypes'
 
 const convert = async (
     data: Buffer,
     mime: string,
-    type: 'crop' | 'full' | 'default' = 'default',
+    type: StickerTypes = StickerTypes.DEFAULT,
     quality = 100
 ): Promise<Buffer> => {
+    console.log('convert', mime, type, quality)
     const isVideo = mime.startsWith('video')
     const image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
     if (isAnimated && type === 'crop') {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
-        return convert(await crop(filename), 'image/webp', 'default')
+        return convert(await crop(filename), 'image/webp', StickerTypes.DEFAULT)
     }
 
     const img = sharp(image, { animated: true }).toFormat('webp')
