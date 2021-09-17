@@ -38,7 +38,9 @@ export class Sticker {
      * @param {string} [type] - How you want your sticker to look like
      * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
      */
-    build = async (type: StickerTypes = this.metadata.type || StickerTypes.DEFAULT): Promise<Buffer> => {
+    build = async (
+        type: StickerTypes = (this.metadata.type as StickerTypes) || StickerTypes.DEFAULT
+    ): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
         return await new Exif(this.metadata as IStickerConfig).add(
