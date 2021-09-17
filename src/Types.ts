@@ -17,7 +17,7 @@ export interface IStickerOptions extends IStickerConfig {
     /** How you want your sticker to look like
      * Can be crop or full. Defaults to 'default' (no changes)
      */
-    type?: StickerTypes & string
+    type?: StickerTypes | string
 
     /**
      * Quality of the output webp image. Must be an integer from 0 to 100 (defaults to 100
