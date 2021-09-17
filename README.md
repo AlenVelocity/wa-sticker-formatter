@@ -44,7 +44,7 @@ Sticker options are:
 
 `pack` - The pack name.<br>
 `author` - The author name.<br>
-`type` - The sticker type. Can be 'crop' or 'full' or undefined (default).<br>
+`type` - Value from StickeTypes enum (exported). Can be 'crop' or 'full' or undefined (default).<br>
 `categories` - The sticker category. Can be an array of Emojis or undefined (default).<br>
 `id` - The sticker id. If this property is not defined, it will be generated.<br>
 
@@ -62,7 +62,7 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
 
 (async () => {
     const stickerMetadata = {
-        type: 'full',
+        type: tickerTypes.CROPPED,
         pack: 'watson',
         author: 'amelia',
         categories: [
@@ -70,21 +70,21 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
         ]
     }
     const sticker = await new Sticker(image, stickerMetadata).build()
-})
+})()
 
 ```
 
 ## 2. Using the `createSticker` function
 
 ```TS
-import { createSticker } from 'wa-sticker-formatter'
+import { createSticker, StickerTypes } from 'wa-sticker-formatter'
 // const { createSticker } = require('wa-sticker-formatter')
 
 const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif' // Supports Buffer, URLs and filepath of Static Images, GIFs and Videos
 
 (async () => {
     const stickerMetadata = {
-        type: 'full', //can be full or crop
+        type: StickerTypes.FULL, //can be full or crop
         pack: 'watson',
         author: 'amelia',
         categories: [
@@ -92,5 +92,5 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
         ]
     }
     const sticker = await createSticker(image, stickerMetadata)
-})
+})()
 ```
