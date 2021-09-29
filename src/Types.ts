@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import { StickerTypes } from './lib/Metadata/StickerTypes'
+import { StickerTypes } from './internal/Metadata/StickerTypes'
 
 /** Sticker metadata config */
 export interface IStickerConfig {

@@ -4,9 +4,9 @@ import { IStickerConfig, IStickerOptions } from './Types'
 import axios from 'axios'
 import Utils from './Utils'
 import { fromBuffer } from 'file-type'
-import convert from './lib/convert'
-import Exif from './lib/Metadata/Exif'
-import { StickerTypes } from './lib/Metadata/StickerTypes'
+import convert from './internal/convert'
+import Exif from './internal/Metadata/Exif'
+import { StickerTypes } from './internal/Metadata/StickerTypes'
 
 export class Sticker {
     constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
