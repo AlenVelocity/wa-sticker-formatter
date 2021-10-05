@@ -1,7 +1,5 @@
 import { Sticker } from '../dist/index.js'
-
-(async () => {
-
+;(async () => {
     console.log('\n---\n')
     console.log('Example')
     console.log('---\n')
@@ -11,7 +9,7 @@ import { Sticker } from '../dist/index.js'
             landscape: 'https://chasinganime.com/wp-content/uploads/2021/02/0_YgtEypuJ2QfMPCbn.jpg'
         },
         animated: {
-            potrait: 'hhttps://c.tenor.com/-1mtmQgH5eYAAAAC/watson-amelia-vtuber.gif',
+            potrait: 'https://c.tenor.com/-1mtmQgH5eYAAAAC/watson-amelia-vtuber.gif',
             landscape: 'https://c.tenor.com/2RdLoyV5VPsAAAAC/ayame-nakiri.gif'
         }
     }
