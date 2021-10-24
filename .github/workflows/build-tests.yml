@@ -17,18 +17,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Setup ffmpeg
-    - uses: FedericoCarboni/setup-ffmpeg@v1
-    with:
-      token: ${{ secrets.GITHUB_TOKEN }}
-    id: setup-ffmpeg
-    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: sudo apt-get update
+    - run: sudo apt-get install ffmpeg
     - run: npm i -g npm@latest
     - run: npm ci
     - run: npm run build
