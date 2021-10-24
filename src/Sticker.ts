@@ -21,7 +21,7 @@ export class Sticker {
     private _parse = async (): Promise<Buffer> =>
         Buffer.isBuffer(this.data)
             ? this.data
-            : await (async () =>
+            : (async () =>
                   existsSync(this.data)
                       ? readFile(this.data)
                       : axios.get(this.data as string, { responseType: 'arraybuffer' }).then(({ data }) => data))()
@@ -42,7 +42,7 @@ export class Sticker {
     ): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        return await new Exif(this.metadata as IStickerConfig).add(
+        return new Exif(this.metadata as IStickerConfig).add(
             await convert(buffer, mime, type, this.metadata.quality)
         )
     }
@@ -69,5 +69,5 @@ export class Sticker {
 }
 
 export const createSticker = async (...args: ConstructorParameters<typeof Sticker>): Promise<Buffer> => {
-    return await new Sticker(...args).build()
+    return new Sticker(...args).build()
 }
