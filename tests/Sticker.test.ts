@@ -71,7 +71,7 @@ describe('Sticker', () => {
             assert.equal(height, width)
         })
     })
-    
+
     describe('Metadata', () => {
         it('should create sticker with the provided pack and author name', async () => {
             const sticker = new Sticker(images.static.potrait, {
@@ -87,4 +87,3 @@ describe('Sticker', () => {
         })
     })
 })
-

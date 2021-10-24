@@ -42,9 +42,7 @@ export class Sticker {
     ): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        return new Exif(this.metadata as IStickerConfig).add(
-            await convert(buffer, mime, type, this.metadata.quality)
-        )
+        return new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, type, this.metadata.quality))
     }
 
     get defaultFilename(): string {

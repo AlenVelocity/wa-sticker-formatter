@@ -1,5 +1,4 @@
 import { Sticker } from '../dist/index.js'
-
 ;(async () => {
     console.log('\n---\n')
     console.log('Crop example')
