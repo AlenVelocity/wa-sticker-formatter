@@ -1,12 +1,15 @@
-# Wa-Sticker-Formatter
+<div align=center>
 
-<img src="https://img.icons8.com/color/96/000000/whatsapp--v5.png" alt="wsf" align="right" />
+<img src="https://img.icons8.com/color/96/000000/whatsapp--v5.png" alt="wsf"/>
+
+# Wa-Sticker-Formatter
 
 Wa-Sticker-Formatter is a simple tool which allows you to create and format WhatsApp Stickers.
 
-</div>
+[![NPM](https://img.shields.io/npm/l/wa-sticker-formatter?style=flat-square&label=License)](https://github.com/AlenSaito1/wa-sticker-formatter/blob/master/LICENSE) [![CodeFactor](https://img.shields.io/codefactor/grade/github/alensaito1/wa-sticker-formatter?style=flat-square&label=Code%20Quality)](https://www.codefactor.io/repository/github/alensaito1/wa-sticker-formatter) [![NPM](https://img.shields.io/npm/dw/wa-sticker-formatter?style=flat-square&label=Downloads)](https://npmjs.com/package/wa-sticker-formatter)
 
-# ⚠️ **WARNING: BREAKING CHANGES! PLEASE READ README BEFORE SWITCHING FROM 3.x to 4.x**
+
+</div>
 
 # Installation
 
@@ -18,7 +21,7 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 
 Before getting started, you need to know some basic information about WhatsApp Sticker Metadata.
 
-In WhatsApp, stickers have thier own metadata embedded in the WebP file. They hold info like the author, the title or pack name, the category.
+In WhatsApp, stickers have their own metadata embedded in the WebP file. They hold info like the author, the title or pack name, the category.
 
 Let's go through them one by one.
 
