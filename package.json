@@ -1,7 +1,7 @@
 {
   "name": "wa-sticker-formatter",
   "version": "4.0.14",
-  "description": "",
+  "description": "Sticker Creator for WhatsApp",
   "main": "dist",
   "types": "dist",
   "files": [
@@ -26,7 +26,7 @@
     "email": "alenyohannan71@gmail.com",
     "url": "https://github.com/Alensaito1"
   },
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "url": "https://github.com/Alensaito1/wa-sticker-formatter"
   },
