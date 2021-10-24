@@ -1,5 +1,4 @@
-import { existsSync } from 'fs'
-import { readFile, writeFile } from 'fs/promises'
+import { existsSync, readFile, writeFile } from 'fs-extra'
 import { IStickerConfig, IStickerOptions } from './Types'
 import axios from 'axios'
 import Utils from './Utils'

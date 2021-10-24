@@ -1,5 +1,5 @@
 import Ffmpeg from 'fluent-ffmpeg'
-import { readFile } from 'fs/promises'
+import { readFile } from 'fs-extra'
 import { tmpdir } from 'os'
 
 const imagesToWebp = async (filename: string): Promise<Buffer> => {

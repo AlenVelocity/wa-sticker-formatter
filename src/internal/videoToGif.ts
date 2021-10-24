@@ -1,5 +1,5 @@
 import ffmpeg from 'fluent-ffmpeg'
-import { writeFile, readFile, unlink } from 'fs/promises'
+import { writeFile, readFile, unlink } from 'fs-extra'
 import { tmpdir } from 'os'
 
 /** https://stackoverflow.com/questions/52156713/fluent-ffmpeg-h264-to-gif-throwing-error-1 */
