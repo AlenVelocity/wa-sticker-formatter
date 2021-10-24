@@ -17,6 +17,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Setup ffmpeg
+    - uses: FedericoCarboni/setup-ffmpeg@v1
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+    id: setup-ffmpeg
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
