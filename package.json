@@ -33,6 +33,7 @@
   "issues": "https://github.com/Alensaito1/wa-sticker-formatter",
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.18",
+    "@types/fs-extra": "^9.0.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.4.13",
     "@types/sharp": "^0.28.5",
