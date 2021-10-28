@@ -17,23 +17,6 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 > npm i wa-sticker-formatter
 ```
 
-# Metadata
-
-Before getting started, here's some basic information about WhatsApp Sticker Metadata.
-
-In WhatsApp, stickers have their own metadata embedded in the WebP file as EXIF Metadata. They hold info like the author, the title or pack name and the category.
-
-### 1. Author and Pack Title
-
-<a href="https://ibb.co/MhyzMwJ"><img src="https://i.ibb.co/9vmxsKd/metadata.jpg" alt="metadata" border="0" width=256></a>
-
-The text on bold is the pack title and the rest is the author.
-This is actually [Exif](https://en.wikipedia.org/wiki/Exif) Metadata embedded in the WebP file.
-
-### 2 Sticker Category
-
-This is an array of Emojis. [Learn More](https://github.com/WhatsApp/stickers/wiki/Tag-your-stickers-with-Emojis)
-
 # Usage
 
 Wa-Sticker-Formatter provides two ways to create stickers.
@@ -48,85 +31,118 @@ Sticker options are:
 `type` - Value from StickeTypes enum (exported). Can be 'crop' or 'full' or undefined (default).<br>
 `categories` - The sticker category. Can be an array of Emojis or undefined (default).<br>
 `id` - The sticker id. If this property is not defined, it will be generated.<br>
+`background`
 
-# Examples
+## Import
 
-## 1. Using the `Sticker` Class (Recommended)
-
-Example:
+Before using the library, you need to import it.
 
 ```TS
-import { Sticker, StickerTypes } from 'wa-sticker-formatter'
-// const { Sticker } = require('wa-sticker-formatter')
+import { Sticker, createSticker, StickerTypes } from 'wa-sticker-formatter' // ES6
+// const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter') // CommonJS
+```
+## Using The `Sticker` constructor (Recommended)
 
-const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif'
+```TS
+const sticker = new Sticker(image, {
+    pack: 'My Pack', // The pack name
+    author: 'Me', // The author name
+    type: StickerTypes.FULL, // The sticker type
+    categories: ['🤩', '🎉'], // The sticker category
+    id: '12345', // The sticker id
+    background: '#000000' // The sticker background color (only for full stickers)
+})
 
-(async () => {
-    const stickerMetadata = {
-        type: StickerTypes.CROPPED,
-        pack: 'watson',
-        author: 'amelia',
-        categories: [
-            '🌹'
-        ]
-    }
-    const sticker = new Sticker(image, { type: StickerTypes.CROPPED })
-        .setAuthor('amelia')
-        .setPack('watson')
-        .setCategories(['🌹'])
-
-    //get Buffer
-
-    const buffer = await sticker.buffer()
-    //save to file
-    await sticker.toFile('output.webp')
-})()
+const buffer = await sticker.toBuffer() // convert to buffer
+// or save to file
+await sticker.toFile('sticker.webp')
 
 ```
 
-## 2. Using the `createSticker` function
+The `image` (first parameter) can be a Buffer, URL or File path.
+
+## Using the `createSticker` function
 
 ```TS
-import { createSticker, StickerTypes } from 'wa-sticker-formatter'
-// const { createSticker } = require('wa-sticker-formatter')
-
-const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif' // Supports Buffer, URLs and filepath of Static Images, GIFs and Videos
-
-(async () => {
-    const stickerMetadata = {
-        type: StickerTypes.FULL, //can be full or crop
-        pack: 'watson',
-        author: 'amelia',
-        categories: [
-            '🌹'
-        ]
-    }
-    // `createSticker` always returns a Buffer
-    const sticker = await createSticker(image, stickerMetadata)
-})()
+const buffer = await createSticker(buffer, options) // same params as the constructor
+// NOTE: `createSticker` returns a Promise of a Buffer
 ```
 
+## Options
 
-## Extract Metadata from a Sticker
+The following options are valid:
+
+```TS
+interface IStickerConfig {
+    /** Sticker Pack title*/
+    pack?: string
+    /** Sticker Pack Author*/
+    author?: string
+    /** Sticker Pack ID*/
+    id?: string
+    /** Sticker Category*/
+    categories?: Categories[]
+    /** Background */
+    background?: Sharp.Color
+     /** Sticker Type */
+    type?: StickerTypes | string
+    /* Output quality */
+    quality?: number
+}
+```
+
+## Sticker Types
+
+Sticker types are exported as an enum.
 
 ```ts
-import { extractMetadata } from 'wa-sticker-formatter'
-import { readFileSync } from 'fs'
-
-(async () => {
-    const sticker = await readFileSync('animated.webp')
-    const metadata = await extractMetadata(sticker)
-    console.log(metadata) /** {
-        'sticker-pack-id': 'ffa64cbdafa7cc0ed999220cfd02fbc511a5070e950e314baabef68f41f85226',
-        'sticker-pack-name': 'animated',
-        'sticker-pack-publisher': 'potrait-full',
-        emojis: []
-    } */
-     
-})()
+enum StickerTypes {
+    DEFAULT = 'default',
+    CROPPED = 'crop',
+    FULL = 'full'
+}
 
 ```
 
+## Background
+
+Background can be a hex color string or a sharp color object.
+```JSON
+{
+    "background": "#FFFFFF"
+}
+```
+or 
+
+```JSON  
+{
+    "background": {
+        "red": 255,
+        "green": 255,
+        "blue": 255,
+        "alpha": 1
+    }
+}
+```
+
+# Metadata
+
+Here's some basic information about WhatsApp Sticker Metadata.
+
+In WhatsApp, stickers have their own metadata embedded in the WebP file as They hold info like the author, the title or pack name and the category.
+
+### 1. Author and Pack Title
+
+<a href="https://ibb.co/MhyzMwJ"><img src="https://i.ibb.co/9vmxsKd/metadata.jpg" alt="metadata" border="0" width=256></a>
+
+The text on bold is the pack title and the rest is the author.
+This is actually [Exif](https://en.wikipedia.org/wiki/Exif) Metadata embedded in the WebP file.
+
+### 2 Sticker Category
+
+This is an array of Emojis. [Learn More](https://github.com/WhatsApp/stickers/wiki/Tag-your-stickers-with-Emojis)
+
+---
 Thanks for using Wa-Sticker-Formatter!
 
 
