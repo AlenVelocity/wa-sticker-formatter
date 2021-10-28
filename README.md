@@ -77,7 +77,7 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
 
     //get Buffer
 
-    const buffer = await sticker.getBuffer()
+    const buffer = await sticker.buffer()
     //save to file
     await sticker.toFile('output.webp')
 })()
