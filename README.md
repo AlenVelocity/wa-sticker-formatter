@@ -19,11 +19,9 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 
 # Metadata
 
-Before getting started, you need to know some basic information about WhatsApp Sticker Metadata.
+Before getting started, here's some basic information about WhatsApp Sticker Metadata.
 
-In WhatsApp, stickers have their own metadata embedded in the WebP file. They hold info like the author, the title or pack name, the category.
-
-Let's go through them one by one.
+In WhatsApp, stickers have their own metadata embedded in the WebP file as EXIF Metadata. They hold info like the author, the title or pack name and the category.
 
 ### 1. Author and Pack Title
 
@@ -53,12 +51,12 @@ Sticker options are:
 
 # Examples
 
-## 1. Using the `Sticker` Class
+## 1. Using the `Sticker` Class (Recommended)
 
 Example:
 
 ```TS
-import { Sticker } from 'wa-sticker-formatter'
+import { Sticker, StickerTypes } from 'wa-sticker-formatter'
 // const { Sticker } = require('wa-sticker-formatter')
 
 const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.gif'
@@ -72,7 +70,16 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
             '🌹'
         ]
     }
-    const sticker = await new Sticker(image, stickerMetadata).build()
+    const sticker = new Sticker(image, { type: StickerTypes.CROPPED })
+        .setAuthor('amelia')
+        .setPack('watson')
+        .setCategories(['🌹'])
+
+    //get Buffer
+
+    const buffer = await sticker.getBuffer()
+    //save to file
+    await sticker.toFile('output.webp')
 })()
 
 ```
@@ -94,6 +101,32 @@ const image = 'https://c.tenor.com/WZBvSgw5JMgAAAAC/watson-amelia-amelia-watson.
             '🌹'
         ]
     }
+    // `createSticker` always returns a Buffer
     const sticker = await createSticker(image, stickerMetadata)
 })()
 ```
+
+
+## Extract Metadata from a Sticker
+
+```ts
+import { extractMetadata } from 'wa-sticker-formatter'
+import { readFileSync } from 'fs'
+
+(async () => {
+    const sticker = await readFileSync('animated.webp')
+    const metadata = await extractMetadata(sticker)
+    console.log(metadata) /** {
+        'sticker-pack-id': 'ffa64cbdafa7cc0ed999220cfd02fbc511a5070e950e314baabef68f41f85226',
+        'sticker-pack-name': 'animated',
+        'sticker-pack-publisher': 'potrait-full',
+        emojis: []
+    } */
+     
+})()
+
+```
+
+Thanks for using Wa-Sticker-Formatter!
+
+
