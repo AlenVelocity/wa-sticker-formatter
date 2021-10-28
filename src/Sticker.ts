@@ -6,6 +6,7 @@ import { fromBuffer } from 'file-type'
 import convert from './internal/convert'
 import Exif from './internal/Metadata/Exif'
 import { StickerTypes } from './internal/Metadata/StickerTypes'
+import { Categories } from '.'
 
 export class Sticker {
     constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
@@ -37,7 +38,7 @@ export class Sticker {
      * @param {string} [type] - How you want your sticker to look like
      * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
      */
-    build = async (
+    public build = async (
         type: StickerTypes = (this.metadata.type as StickerTypes) || StickerTypes.DEFAULT
     ): Promise<Buffer> => {
         const buffer = await this._parse()
@@ -45,7 +46,7 @@ export class Sticker {
         return new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, type, this.metadata.quality))
     }
 
-    get defaultFilename(): string {
+    public get defaultFilename(): string {
         return `./${this.metadata.pack}-${this.metadata.author}.webp`
     }
 
@@ -54,16 +55,56 @@ export class Sticker {
      * @param [filename] - Filename to save the sticker to
      * @returns filename
      */
-    toFile = async (filename = this.defaultFilename): Promise<string> => {
+    public toFile = async (filename = this.defaultFilename): Promise<string> => {
         await writeFile(filename, await this.build())
         return filename
+    }
+
+    /**
+     * Set the sticker pack title
+     * @param pack - Sticker Pack Title
+     * @returns {this}
+     */
+    public setPack = (pack: string): this => {
+        this.metadata.pack = pack
+        return this
+    }
+
+    /**
+     * Set the sticker pack author
+     * @param author - Sticker Pack Author
+     * @returns
+     */
+    public setAuthor = (author: string): this => {
+        this.metadata.author = author
+        return this
+    }
+
+    /**
+     * Set the sticker pack ID
+     * @param id - Sticker Pack ID
+     * @returns {this}
+     */
+    public setID = (id: string): this => {
+        this.metadata.id = id
+        return this
+    }
+
+    /**
+     * Set the sticker category
+     * @param categories - Sticker Category
+     * @returns {this}
+     */
+    public setCategories = (categories: Categories[]): this => {
+        this.metadata.categories = categories
+        return this
     }
 
     /**
      * @deprecated
      * Use the `Sticker.build()` method instead
      */
-    get = this.build
+    public get = this.build
 }
 
 export const createSticker = async (...args: ConstructorParameters<typeof Sticker>): Promise<Buffer> => {
