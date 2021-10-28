@@ -1,4 +1,4 @@
-import sharp from 'sharp'
+import sharp, { Color } from 'sharp'
 import { StickerTypes } from './internal/Metadata/StickerTypes'
 
 /** Sticker metadata config */
@@ -11,6 +11,8 @@ export interface IStickerConfig {
     id?: string
     /** Sticker Category*/
     categories?: Categories[]
+    /** Background */
+    background?: Color
 }
 
 export interface IStickerOptions extends IStickerConfig {

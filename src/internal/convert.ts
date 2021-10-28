@@ -1,15 +1,22 @@
-import sharp from 'sharp'
+import sharp, { Color } from 'sharp'
 import videoToGif from './videoToGif'
 import { writeFile } from 'fs-extra'
 import { tmpdir } from 'os'
 import crop from './crop'
 import { StickerTypes } from './Metadata/StickerTypes'
+import { defaultBg } from '../Utils'
 
 const convert = async (
     data: Buffer,
     mime: string,
     type: StickerTypes = StickerTypes.DEFAULT,
-    quality = 100
+    {
+        quality = 100,
+        background = defaultBg
+    }: {
+        quality?: number
+        background?: Color
+    }
 ): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
     let image = isVideo ? await videoToGif(data) : data
@@ -34,12 +41,7 @@ const convert = async (
             width: pageHeight,
             height: pageHeight * pages,
             fit: 'contain',
-            background: {
-                r: 0,
-                g: 0,
-                b: 0,
-                alpha: 0
-            }
+            background
         }).webp({
             pageHeight
         })

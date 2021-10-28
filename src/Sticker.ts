@@ -1,22 +1,24 @@
 import { existsSync, readFile, writeFile } from 'fs-extra'
 import { IStickerConfig, IStickerOptions } from './Types'
 import axios from 'axios'
-import Utils from './Utils'
+import Utils, { defaultBg } from './Utils'
 import { fromBuffer } from 'file-type'
 import convert from './internal/convert'
 import Exif from './internal/Metadata/Exif'
 import { StickerTypes } from './internal/Metadata/StickerTypes'
 import { Categories } from '.'
+import { Color } from 'sharp'
 
 export class Sticker {
     constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
-        this.metadata.author = this.metadata.author || ''
-        this.metadata.pack = this.metadata.pack || ''
-        this.metadata.id = this.metadata.id || Utils.generateStickerID()
-        this.metadata.quality = this.metadata.quality || 100
+        this.metadata.author = this.metadata.author ?? ''
+        this.metadata.pack = this.metadata.pack ?? ''
+        this.metadata.id = this.metadata.id ?? Utils.generateStickerID()
+        this.metadata.quality = this.metadata.quality ?? 100
         this.metadata.type = Object.values(StickerTypes).includes(this.metadata.type as StickerTypes)
             ? this.metadata.type
             : StickerTypes.DEFAULT
+        this.metadata.background = this.metadata.background ?? defaultBg
     }
 
     private _parse = async (): Promise<Buffer> =>
@@ -43,7 +45,13 @@ export class Sticker {
     ): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        return new Exif(this.metadata as IStickerConfig).add(await convert(buffer, mime, type, this.metadata.quality))
+        const { quality, background } = this.metadata
+        return new Exif(this.metadata as IStickerConfig).add(
+            await convert(buffer, mime, type, {
+                quality,
+                background
+            })
+        )
     }
 
     public get defaultFilename(): string {
@@ -87,6 +95,11 @@ export class Sticker {
      */
     public setID = (id: string): this => {
         this.metadata.id = id
+        return this
+    }
+
+    public setBackground = (background: Color): this => {
+        this.metadata.background = background
         return this
     }
 

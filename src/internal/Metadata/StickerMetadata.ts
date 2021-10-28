@@ -54,7 +54,7 @@ export default class StickerMetadata implements IStickerOptions {
         const obj: any = {}
         Object.keys(this)
             .filter((key) => typeof this[key as keyof this] !== 'function')
-            .forEach((key) => (obj[key] = this[key as keyof IStickerConfig] as IStickerConfig[keyof IStickerConfig]))
+            .forEach((key) => (obj[key] = this[key as Exclude<'background', keyof IStickerConfig>] as IStickerConfig[keyof IStickerConfig]))
         return obj as IStickerConfig
     }
 }
