@@ -24,7 +24,7 @@ export interface IStickerOptions extends IStickerConfig {
      */
     quality?: sharp.WebpOptions['quality']
     /** 
-     * Background Color of the sticker (only works with type full)
+     * Background Color of the sticker (only for type full)
      */
     background?: Color
 }
