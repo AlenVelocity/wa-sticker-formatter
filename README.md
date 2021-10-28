@@ -101,11 +101,8 @@ enum StickerTypes {
     CROPPED = 'crop',
     FULL = 'full'
 }
-<<<<<<< HEAD
 
 ```
-=======
->>>>>>> 8f2cc1aaf538ddd82caaa0cec6fa20e1b58ef757
 
 ## Background
 
