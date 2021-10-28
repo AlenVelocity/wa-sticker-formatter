@@ -98,6 +98,11 @@ export class Sticker {
         return this
     }
 
+    /**
+     * Set background color for `full` images
+     * @param background - Background color
+     * @returns 
+     */
     public setBackground = (background: Color): this => {
         this.metadata.background = background
         return this
