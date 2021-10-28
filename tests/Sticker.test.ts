@@ -1,8 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path='../src/internal/node-webmux' />
 import { strict as assert } from 'assert'
-import Sticker, { StickerTypes } from '../src'
-import { Image } from 'node-webpmux'
+import Sticker, { extractMetadata, StickerTypes } from '../src'
 import sizeOf from 'image-size'
 
 const images = {
@@ -17,7 +15,6 @@ const images = {
 }
 
 describe('Sticker', () => {
-    console.log(StickerTypes)
     describe('Static Stickers', () => {
         it('should create a static sticker', async () => {
             const sticker = new Sticker(images.static.potrait)
@@ -74,16 +71,15 @@ describe('Sticker', () => {
 
     describe('Metadata', () => {
         it('should create sticker with the provided pack and author name', async () => {
-            const sticker = new Sticker(images.static.potrait, {
+            const options = {
                 pack: 'WSF',
                 author: 'Well'
-            })
+            } as const
+            const sticker = new Sticker(images.static.potrait).setAuthor(options.author).setPack(options.pack)
             const buffer = await sticker.build()
-            const image = new Image()
-            await image.load(buffer)
-            const exif = image.exif.toString('utf-8')
-            assert.equal(exif.includes('WSF'), true)
-            assert.equal(exif.includes('Well'), true)
+            const metadata = await extractMetadata(buffer)
+            assert.equal(metadata['sticker-pack-name'], options.pack)
+            assert.equal(metadata['sticker-pack-publisher'], options.author)
         })
     })
 })
