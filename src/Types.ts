@@ -11,8 +11,6 @@ export interface IStickerConfig {
     id?: string
     /** Sticker Category*/
     categories?: Categories[]
-    /** Background */
-    background?: Color
 }
 
 export interface IStickerOptions extends IStickerConfig {
@@ -25,6 +23,10 @@ export interface IStickerOptions extends IStickerConfig {
      * Quality of the output webp image. Must be an integer from 0 to 100 (defaults to 100
      */
     quality?: sharp.WebpOptions['quality']
+    /** 
+     * Background Color of the sticker (only works with type full)
+     */
+    background?: Color
 }
 
 export interface IRawMetadata {
