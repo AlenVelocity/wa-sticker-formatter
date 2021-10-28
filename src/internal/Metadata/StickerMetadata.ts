@@ -2,8 +2,8 @@ import { Categories, IStickerConfig, IStickerOptions } from '../../Types'
 import Utils from '../../Utils'
 
 export default class StickerMetadata implements IStickerOptions {
-    crop = false
-    full = false
+    public crop = false
+    public full = false
     constructor(
         public pack = '',
         public author = '',
@@ -11,45 +11,45 @@ export default class StickerMetadata implements IStickerOptions {
         public id = Utils.generateStickerID()
     ) {}
 
-    from = (object: Partial<this>): StickerMetadata => {
+    static from = (object: Partial<StickerMetadata>): StickerMetadata => {
         return new StickerMetadata(object.pack, object.author, object.categories, object.id)
     }
 
-    setPack = (title: string): this => {
+    public setPack = (title: string): this => {
         this.pack = title
         return this
     }
 
-    setAuthor = (author: string): this => {
+    public setAuthor = (author: string): this => {
         this.author = author
         return this
     }
 
-    setId = (id: string): this => {
+    public setId = (id: string): this => {
         this.id = id
         return this
     }
 
-    setCrop = (value: boolean): this => {
+    public setCrop = (value: boolean): this => {
         this.crop = value
         this.full = !value
         return this
     }
 
-    setFull = (value: boolean): this => {
+    public setFull = (value: boolean): this => {
         this.crop = !value
         this.full = value
         return this
     }
 
-    setCategories = (categories: string | string[]): this => {
+    public setCategories = (categories: string | string[]): this => {
         this.categories = (
             typeof categories === 'string' ? categories.split(',').map((emoji) => emoji.trim()) : categories
         ) as Categories[]
         return this
     }
 
-    toJSON = (): IStickerConfig => {
+    public toJSON = (): IStickerConfig => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const obj: any = {}
         Object.keys(this)
