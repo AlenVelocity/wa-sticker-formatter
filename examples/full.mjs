@@ -44,5 +44,56 @@ import { Sticker } from '../dist/index.js'
         await sticker.toFile()
         console.log(`Saved to ${sticker.defaultFilename}`)
     })()
+    await (async () => {
+        console.log('Static Landscape with background')
+        const sticker = new Sticker(images.static.landscape, getOptions('static', 'landscape-bg'))
+        sticker.setBackground({
+            r: 255,
+            g: 255,
+            b: 255,
+            alpha: 1
+        })
+        await sticker.toFile()
+        console.log(`Saved to ${sticker.defaultFilename}`)
+    })()
     console.log('\n---\n')
+    await (async () => {
+        console.log('Static Potrait with background')
+        const sticker = new Sticker(images.static.potrait, getOptions('static', 'potrait-bg'))
+        sticker.setBackground({
+            r: 255,
+            g: 255,
+            b: 255,
+            alpha: 1
+        })
+        await sticker.toFile()
+        console.log(`Saved to ${sticker.defaultFilename}`)
+    })
+    console.log('\n---\n')
+    await (async () => {
+        console.log('Animated Landscape With Background')
+        const sticker = new Sticker(images.animated.landscape, getOptions('animated', 'landscape-bg'))
+        sticker.setBackground({
+            r: 255,
+            g: 255,
+            b: 255,
+            alpha: 1
+        })
+        await sticker.toFile()
+        console.log(`Saved to ${sticker.defaultFilename}`)
+    })()
+    console.log('\n---\n')
+    await (async () => {
+        console.log('Animated Protrait With Background')
+        const sticker = new Sticker(images.animated.potrait, getOptions('animated', 'potrait-bg'))
+        sticker.setBackground({
+            r: 255,
+            g: 255,
+            b: 255,
+            alpha: 1
+        })
+        await sticker.toFile()
+        console.log(`Saved to ${sticker.defaultFilename}`)
+    })()
+
 })()
