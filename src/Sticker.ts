@@ -54,6 +54,13 @@ export class Sticker {
         )
     }
 
+    /**
+     * Alias for `.build()`
+     * @param {string} [type] - How you want your sticker to look like
+     * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+     */
+    public toBuffer = this.build
+
     public get defaultFilename(): string {
         return `./${this.metadata.pack}-${this.metadata.author}.webp`
     }
