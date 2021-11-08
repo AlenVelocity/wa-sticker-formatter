@@ -9,7 +9,15 @@ import { StickerTypes } from './internal/Metadata/StickerTypes'
 import { Categories } from '.'
 import { Color } from 'sharp'
 
+/**
+ * Sticker class
+ */
 export class Sticker {
+    /**
+     * Sticker Constructor
+     * @param {string|Buffer} [data] - File path, url or Buffer of the image/video to be converted
+     * @param {IStickerOptions} [options] - Sticker options
+     */
     constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
         this.metadata.author = this.metadata.author ?? ''
         this.metadata.pack = this.metadata.pack ?? ''
@@ -39,6 +47,9 @@ export class Sticker {
      * Builds the sticker
      * @param {string} [type] - How you want your sticker to look like
      * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * const buffer = sticker.build()
      */
     public build = async (
         type: StickerTypes = (this.metadata.type as StickerTypes) || StickerTypes.DEFAULT
@@ -58,6 +69,9 @@ export class Sticker {
      * Alias for `.build()`
      * @param {string} [type] - How you want your sticker to look like
      * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * const buffer = sticker.build()
      */
     public toBuffer = this.build
 
@@ -69,6 +83,9 @@ export class Sticker {
      * Saves the sticker to a file
      * @param [filename] - Filename to save the sticker to
      * @returns filename
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * sticker.toFile('./image.webp')
      */
     public toFile = async (filename = this.defaultFilename): Promise<string> => {
         await writeFile(filename, await this.build())
@@ -79,6 +96,10 @@ export class Sticker {
      * Set the sticker pack title
      * @param pack - Sticker Pack Title
      * @returns {this}
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * sticker.setPack('My Sticker Pack')
+     * sticker.build()
      */
     public setPack = (pack: string): this => {
         this.metadata.pack = pack
@@ -99,6 +120,10 @@ export class Sticker {
      * Set the sticker pack ID
      * @param id - Sticker Pack ID
      * @returns {this}
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * sticker.setID('my-sticker-pack')
+     * sticker.build()
      */
     public setID = (id: string): this => {
         this.metadata.id = id
@@ -109,6 +134,10 @@ export class Sticker {
      * Set background color for `full` images
      * @param background - Background color
      * @returns
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * sticker.setBackground('#000000')
+     * sticker.build()
      */
     public setBackground = (background: Color): this => {
         this.metadata.background = background
@@ -119,6 +148,9 @@ export class Sticker {
      * Set the sticker category
      * @param categories - Sticker Category
      * @returns {this}
+     * @example
+     * const sticker = new Sticker('./image.png')
+     * sticker.setCategories(['🌹'])
      */
     public setCategories = (categories: Categories[]): this => {
         this.metadata.categories = categories
@@ -132,6 +164,12 @@ export class Sticker {
     public get = this.build
 }
 
+/**
+ *
+ * @param {string|Buffer} data - File path, url or Buffer of the image/video to be converted
+ * @param {IStickerOptions} [options] - Sticker options
+ * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+ */
 export const createSticker = async (...args: ConstructorParameters<typeof Sticker>): Promise<Buffer> => {
     return new Sticker(...args).build()
 }
