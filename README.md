@@ -30,8 +30,9 @@ Sticker options are:
 `author` - The author name.<br>
 `type` - Value from StickeTypes enum (exported). Can be 'crop' or 'full' or undefined (default).<br>
 `categories` - The sticker category. Can be an array of Emojis or undefined (default).<br>
+`quality` - The quality of the output file. Can be an integer from 0 to 100. Defaults to 100.
 `id` - The sticker id. If this property is not defined, it will be generated.<br>
-`background`
+`background` - Background color in hexadecimal format or an RGBA Object. Defaults to undefined (transparent).<br>
 
 ## Import
 
@@ -50,6 +51,7 @@ const sticker = new Sticker(image, {
     type: StickerTypes.FULL, // The sticker type
     categories: ['🤩', '🎉'], // The sticker category
     id: '12345', // The sticker id
+    quality: 50, // The quality of the output file
     background: '#000000' // The sticker background color (only for full stickers)
 })
 
@@ -57,6 +59,20 @@ const buffer = await sticker.toBuffer() // convert to buffer
 // or save to file
 await sticker.toFile('sticker.webp')
 
+```
+
+You can also chain methods like this:
+
+```TS
+const sticker = new Sticker(image)
+    .setPack('My Pack')
+    .setAuthor('Me')
+    .setType(StickerTypes.FULL)
+    .setCategories(['🤩', '🎉'])
+    .setId('12345')
+    .setBackground('#000000')
+    .setQuality(50)
+    .toBuffer()
 ```
 
 The `image` (first parameter) can be a Buffer, URL or File path.
