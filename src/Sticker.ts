@@ -129,21 +129,7 @@ export class Sticker {
         this.metadata.id = id
         return this
     }
-
-    /**
-     * Set background color for `full` images
-     * @param background - Background color
-     * @returns
-     * @example
-     * const sticker = new Sticker('./image.png')
-     * sticker.setBackground('#000000')
-     * sticker.build()
-     */
-    public setBackground = (background: Color): this => {
-        this.metadata.background = background
-        return this
-    }
-
+    
     /**
      * Set the sticker category
      * @param categories - Sticker Category
@@ -154,6 +140,36 @@ export class Sticker {
      */
     public setCategories = (categories: Categories[]): this => {
         this.metadata.categories = categories
+        return this
+    }
+
+    /**
+     * Set the sticker type
+     * @param {StickerTypes|string}[type] - Sticker Type
+     * @returns {this}
+     */
+    public setType = (type: StickerTypes | string): this => {
+        this.metadata.type = type
+        return this
+    }
+
+    /**
+     * Set the sticker quality
+     * @param {number}[quality] - Sticker Quality
+     * @returns {this}
+     */
+    public setQuality = (quality: number): this => {
+        this.metadata.quality = quality
+        return this
+    }
+
+    /**
+     * Set the background color for `full` images
+     * @param {Color}[background] - Background color
+     * @returns {this}
+     */
+    public setBackground = (background: Color): this => {
+        this.metadata.background = background
         return this
     }
 
