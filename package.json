@@ -14,7 +14,8 @@
     "prepublish": "npm run build",
     "fmt": "prettier --config .prettierrc \"**/*.{ts,mjs}\" --write",
     "test": "mocha --timeout 60000 -r ts-node/register \"tests/**/*.test.ts\"",
-    "clean:webp": "find ./ -name '*.webp' -delete"
+    "clean:webp": "find ./ -name '*.webp' -delete",
+    "vs": "version-select"
   },
   "keywords": [
     "whatsapp",
