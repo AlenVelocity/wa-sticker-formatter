@@ -95,5 +95,4 @@ import { Sticker } from '../dist/index.js'
         await sticker.toFile()
         console.log(`Saved to ${sticker.defaultFilename}`)
     })()
-
 })()
