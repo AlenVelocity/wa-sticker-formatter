@@ -68,6 +68,16 @@ describe('Sticker', () => {
             const { height, width } = sizeOf(buffer)
             assert.equal(height, width)
         })
+
+        it('should create a sticker from svg', async () => {
+            const sticker = new Sticker(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 464c-119.1 0-216-96.9-216-216S136.9 40 256 40s216 96.9 216 216-96.9 216-216 216z" fill="#ff0000" />
+                </svg>
+            `)
+            const buffer = await sticker.build()
+            assert.ok(buffer)
+        })
     })
 
     describe('Metadata', () => {
