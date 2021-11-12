@@ -32,14 +32,17 @@ export class Sticker {
     private _parse = async (): Promise<Buffer> =>
         Buffer.isBuffer(this.data)
             ? this.data
-            : (async () =>
+            : this.data.trim().startsWith('<svg') ? Buffer.from(this.data) : (async () =>
                   existsSync(this.data)
                       ? readFile(this.data)
                       : axios.get(this.data as string, { responseType: 'arraybuffer' }).then(({ data }) => data))()
 
     private _getMimeType = async (data: Buffer): Promise<string> => {
         const type = await fromBuffer(data)
-        if (!type) throw new Error('Invalid Buffer Instance')
+        if (!type) {
+            if (typeof this.data === 'string') return 'image/svg+xml'
+            throw new Error('Invalid file type')
+        }
         return type.mime
     }
 
@@ -52,10 +55,10 @@ export class Sticker {
      */
     public build = async (
     ): Promise<Buffer> => {
-        const buffer = await this._parse()
-        const mime = await this._getMimeType(buffer)
+        const data = await this._parse()
+        const mime = await this._getMimeType(data)
         return new Exif(this.metadata as IStickerConfig).add(
-            await convert(buffer, mime, this.metadata)
+            await convert(data, mime, this.metadata)
         )
     }
 
