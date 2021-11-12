@@ -22,7 +22,7 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 Wa-Sticker-Formatter provides two ways to create stickers.
 The paramers are the same for both.
 
-First is the Buffer, URL or File path of static image, GIF or Video. The second is the options. GIFs and Videos will output an animated WebP file.
+First is the Buffer, SVG String, URL or File path of static image, GIF or Video. The second is the options. GIFs and Videos will output an animated WebP file.
 
 Sticker options are:
 
