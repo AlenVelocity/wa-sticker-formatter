@@ -45,23 +45,17 @@ export class Sticker {
 
     /**
      * Builds the sticker
-     * @param {string} [type] - How you want your sticker to look like
      * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
      * @example
      * const sticker = new Sticker('./image.png')
      * const buffer = sticker.build()
      */
     public build = async (
-        type: StickerTypes = (this.metadata.type as StickerTypes) || StickerTypes.DEFAULT
     ): Promise<Buffer> => {
         const buffer = await this._parse()
         const mime = await this._getMimeType(buffer)
-        const { quality, background } = this.metadata
         return new Exif(this.metadata as IStickerConfig).add(
-            await convert(buffer, mime, type, {
-                quality,
-                background
-            })
+            await convert(buffer, mime, this.metadata)
         )
     }
 

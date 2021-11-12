@@ -1,23 +1,20 @@
-import sharp, { Color } from 'sharp'
+import sharp from 'sharp'
 import videoToGif from './videoToGif'
 import { writeFile } from 'fs-extra'
 import { tmpdir } from 'os'
 import crop from './crop'
 import { StickerTypes } from './Metadata/StickerTypes'
 import { defaultBg } from '../Utils'
+import { IStickerOptions } from '..'
 
 const convert = async (
     data: Buffer,
     mime: string,
-    type: StickerTypes = StickerTypes.DEFAULT,
     {
         quality = 100,
-        background = defaultBg
-    }: {
-        quality?: number
-        background?: Color
-    }
-): Promise<Buffer> => {
+        background = defaultBg,
+        type = StickerTypes.DEFAULT,
+    }: IStickerOptions): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
     let image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
