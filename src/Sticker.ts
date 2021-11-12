@@ -32,7 +32,9 @@ export class Sticker {
     private _parse = async (): Promise<Buffer> =>
         Buffer.isBuffer(this.data)
             ? this.data
-            : this.data.trim().startsWith('<svg') ? Buffer.from(this.data) : (async () =>
+            : this.data.trim().startsWith('<svg')
+            ? Buffer.from(this.data)
+            : (async () =>
                   existsSync(this.data)
                       ? readFile(this.data)
                       : axios.get(this.data as string, { responseType: 'arraybuffer' }).then(({ data }) => data))()
@@ -53,13 +55,10 @@ export class Sticker {
      * const sticker = new Sticker('./image.png')
      * const buffer = sticker.build()
      */
-    public build = async (
-    ): Promise<Buffer> => {
+    public build = async (): Promise<Buffer> => {
         const data = await this._parse()
         const mime = await this._getMimeType(data)
-        return new Exif(this.metadata as IStickerConfig).add(
-            await convert(data, mime, this.metadata)
-        )
+        return new Exif(this.metadata as IStickerConfig).add(await convert(data, mime, this.metadata))
     }
 
     /**
@@ -126,7 +125,7 @@ export class Sticker {
         this.metadata.id = id
         return this
     }
-    
+
     /**
      * Set the sticker category
      * @param categories - Sticker Category
