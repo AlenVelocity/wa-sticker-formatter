@@ -22,9 +22,9 @@ Wa-Sticker-Formatter is a simple tool which allows you to create and format What
 Wa-Sticker-Formatter provides two ways to create stickers.
 The paramers are the same for both.
 
-First is the Buffer, SVG String, URL or File path of static image, GIF or Video. The second is the options. GIFs and Videos will output an animated WebP file.
+1. First is the Buffer, SVG String, URL, SVG String or File path of static image, GIF or Video. The second is the options. GIFs and Videos will output an animated WebP file.
 
-Sticker options are:
+2. 2nd Paramter, an object, Sticker Options accepts the following fields
 
 `pack` - The pack name.<br>
 `author` - The author name.<br>
@@ -59,12 +59,15 @@ const buffer = await sticker.toBuffer() // convert to buffer
 // or save to file
 await sticker.toFile('sticker.webp')
 
+// or get Baileys-MD Compatible Object
+conn.sendMessage(jid, await sticker.toMessage())
+
 ```
 
 You can also chain methods like this:
 
 ```TS
-const sticker = new Sticker(image)
+const buffer = await new Sticker(image)
     .setPack('My Pack')
     .setAuthor('Me')
     .setType(StickerTypes.FULL)
@@ -75,7 +78,16 @@ const sticker = new Sticker(image)
     .toBuffer()
 ```
 
-The `image` (first parameter) can be a Buffer, URL or File path.
+The `image` (first parameter) can be a Buffer, URL, SVG string, or File path.
+
+### SVG Example
+```TS
+const sticker = new Sticker(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+        <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 464c-119.1 0-216-96.9-216-216S136.9 40 256 40s216 96.9 216 216-96.9 216-216 216z" fill="#ff0000" />
+    </svg>
+`, { author: 'W3' })
+```
 
 ## Using the `createSticker` function
 
