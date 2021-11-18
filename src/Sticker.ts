@@ -174,6 +174,19 @@ export class Sticker {
      * Use the `Sticker.build()` method instead
      */
     public get = this.build
+
+    /**
+     * Get BaileysMD-compatible message object
+     * @returns {{ sticker: Buffer }}
+     * @example
+     * import { create } from '@adiwajshing/baileys-md'
+     * const conn = create()
+     * ...
+     * const sticker = new Sticker('./image.png', { pack: 'My Sticker Pack', author: 'Me' })
+     * const message = await sticker.toMessage()
+     * conn.sendMessage(jid, message)
+     */
+    public toMessage = async (): Promise<{ sticker: Buffer }> => ({ sticker: await this.build() })
 }
 
 /**
