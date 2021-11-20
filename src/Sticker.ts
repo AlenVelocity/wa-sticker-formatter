@@ -6,7 +6,7 @@ import { fromBuffer } from 'file-type'
 import convert from './internal/convert'
 import Exif from './internal/Metadata/Exif'
 import { StickerTypes } from './internal/Metadata/StickerTypes'
-import { Categories } from '.'
+import { Categories, extractMetadata } from '.'
 import { Color } from 'sharp'
 
 /**
@@ -187,6 +187,12 @@ export class Sticker {
      * conn.sendMessage(jid, message)
      */
     public toMessage = async (): Promise<{ sticker: Buffer }> => ({ sticker: await this.build() })
+
+    /**
+     * Extracts metadata from a WebP image.
+     * @param {Buffer}image - The image buffer to extract metadata from
+     */
+    public static extractMetadata = extractMetadata
 }
 
 /**
