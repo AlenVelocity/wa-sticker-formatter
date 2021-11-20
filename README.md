@@ -170,6 +170,22 @@ This is actually [Exif](https://en.wikipedia.org/wiki/Exif) Metadata embedded in
 
 This is an array of Emojis. [Learn More](https://github.com/WhatsApp/stickers/wiki/Tag-your-stickers-with-Emojis)
 
+
+### Extracting Metadata
+To extract the metadata from the WebP file, you can use the `extractMetadata()` function.
+
+```TS
+import { extractMetadata, Sticker } from 'wa-sticker-formatter'
+import { readFileSync } from 'fs'
+
+const sticker = readFileSync('sticker.webp')
+let metadata = await extractMetadata(sticker) // { emojis: [], 'sticker-pack-id': '', 'sticker-pack-name': '', 'sticker-author-name': '' }
+
+// or use the static method from the Sticker class
+metadata = await Sticker.extractMetadata(sticker)
+
+```
+
 ---
 Thanks for using Wa-Sticker-Formatter!
 
