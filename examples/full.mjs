@@ -17,7 +17,7 @@ import { Sticker } from '../dist/index.js'
     const getOptions = (pack = '', author = '') => ({
         pack,
         type,
-        author: `${author}-${type}`,
+        author: `${author}-${type}`
     })
     await (async () => {
         console.log('Static Potrait')
