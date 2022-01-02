@@ -27,7 +27,7 @@ jobs:
             
             - name: Install Libvips
               run: sudo apt-get update
-              run: sudo apt-get install libvips-dev linuxmusl-arm64v8
+              run: sudo apt-get install libvips-dev linuxmusl
 
             - name: Install Dependencies
               run: npm i
