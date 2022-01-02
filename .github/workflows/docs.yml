@@ -24,6 +24,10 @@ jobs:
 
             - name: Setup Node.js environment
               uses: actions/setup-node@v2.1.1
+            
+            - name: Install Libvips
+              run: sudo apt-get update
+              run: sudo apt-get install libvips-dev
 
             - name: Install Dependencies
               run: npm i
