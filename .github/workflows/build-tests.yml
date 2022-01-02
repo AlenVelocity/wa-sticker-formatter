@@ -23,7 +23,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: sudo apt-get update
+<<<<<<< HEAD
     - run: sudo apt-get install ffmpeg libvips-dev linuxmusl-arm64v8
+=======
+    - run: sudo apt-get install ffmpeg libvips-dev
+>>>>>>> 55ef21be4fa9f0ab5827a4e7a1e9f2ff1a994ca5
     - run: npm i -g npm@latest
     - run: npm ci
     - run: npm run build
