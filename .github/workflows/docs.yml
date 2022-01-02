@@ -26,8 +26,8 @@ jobs:
               uses: actions/setup-node@v2.1.1
             
             - name: Install Libvips
-              run: sudo apt-get update
-              run: sudo apt-get install libvips-dev linuxmusl
+              - run: sudo apt-get update
+              - run: sudo apt-get install ffmpeg libvips-dev gtk-doc-tools gobject-introspection
 
             - name: Install Dependencies
               run: npm i
