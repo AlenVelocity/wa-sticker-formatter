@@ -18,7 +18,6 @@ import { Sticker } from '../dist/index.js'
         pack,
         type,
         author: `${author}-${type}`,
-        quality: 10
     })
     await (async () => {
         console.log('Static Potrait')
@@ -68,7 +67,7 @@ import { Sticker } from '../dist/index.js'
         })
         await sticker.toFile()
         console.log(`Saved to ${sticker.defaultFilename}`)
-    })
+    })()
     console.log('\n---\n')
     await (async () => {
         console.log('Animated Landscape With Background')

@@ -30,15 +30,9 @@ const convert = async (
         })
 
     if (type === 'full') {
-        const { pages = 1 } = await img.metadata()
-        const pageHeight = 512
-        img.resize({
-            width: pageHeight,
-            height: pageHeight * pages,
+        img.resize(512, 512, {
             fit: 'contain',
             background
-        }).webp({
-            pageHeight
         })
     }
 
