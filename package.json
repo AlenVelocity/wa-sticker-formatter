@@ -58,6 +58,6 @@
     "fs-extra": "^10.0.0",
     "image-size": "^1.0.0",
     "node-webpmux": "^3.1.0",
-    "sharp": "github:lovell/sharp"
+    "sharp": "^0.30.0"
   }
 }
