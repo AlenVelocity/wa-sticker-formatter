@@ -1,7 +1,7 @@
-import { Sticker } from '../dist/index.js'
+import { Sticker } from '../src'
 ;(async () => {
     console.log('\n---\n')
-    console.log('Crop example')
+    console.log('Circle example')
     console.log('---\n')
     const images = {
         static: {
@@ -13,12 +13,11 @@ import { Sticker } from '../dist/index.js'
             landscape: 'https://c.tenor.com/2RdLoyV5VPsAAAAC/ayame-nakiri.gif'
         }
     }
-    const type = 'crop'
+    const type = 'circle'
     const getOptions = (pack = '', author = '') => ({
         pack,
         type,
-        author: `${author}-${type}`,
-        quality: 10
+        author: `${author}-${type}`
     })
     await (async () => {
         console.log('Static Potrait')
@@ -32,17 +31,4 @@ import { Sticker } from '../dist/index.js'
         await sticker.toFile()
         console.log(`Saved to ${sticker.defaultFilename}`)
     })()
-    await (async () => {
-        console.log('Animated Potrait')
-        const sticker = new Sticker(images.animated.potrait, getOptions('animated', 'potrait'))
-        await sticker.toFile()
-        console.log(`Saved to ${sticker.defaultFilename}`)
-    })()
-    await (async () => {
-        console.log('Animated Landscape')
-        const sticker = new Sticker(images.animated.landscape, getOptions('animated', 'landscape'))
-        await sticker.toFile()
-        console.log(`Saved to ${sticker.defaultFilename}`)
-    })()
-    console.log('\n---\n')
 })()

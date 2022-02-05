@@ -1,4 +1,4 @@
-import { Sticker } from '../dist/index.js'
+import { Sticker } from '../src'
 ;(async () => {
     console.log('\n---\n')
     console.log('Example')
