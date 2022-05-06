@@ -127,7 +127,9 @@ Sticker types are exported as an enum.
 enum StickerTypes {
     DEFAULT = 'default',
     CROPPED = 'crop',
-    FULL = 'full'
+    FULL = 'full',
+    CIRCLE = 'circle',
+    ROUNDED = 'rounded'
 }
 
 ```
