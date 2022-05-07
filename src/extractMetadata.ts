@@ -9,9 +9,9 @@ export const extractMetadata = async (image: Buffer): Promise<Partial<IRawMetada
     const img = new Image()
     await img.load(image)
     const exif = img.exif?.toString('utf-8') ?? '{}'
-    var bracesCount = exif.match(/{/g).length
+    const bracesCount = exif.match(/{/g).length
 
-    var index = 0
+    let index = 0
 
     for (let i = 0; i < bracesCount; i++) {
         index = exif.indexOf('{', index + 1)
