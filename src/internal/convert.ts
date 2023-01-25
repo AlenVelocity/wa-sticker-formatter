@@ -16,38 +16,42 @@ const convert = async (
     let image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
 
-    if (isAnimated && ['crop', 'circle'].includes(type)) {
+    if (isAnimated && [StickerTypes.CROPPED, StickerTypes.CIRCLE].includes(type)) {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
-        ;[image, type] = [await crop(filename), type === 'circle' ? StickerTypes.CIRCLE : StickerTypes.DEFAULT]
+        ;[image, type] = [await crop(filename), type === StickerTypes.CIRCLE ? StickerTypes.CIRCLE : StickerTypes.DEFAULT]
     }
 
-    const img = sharp(image, { animated: type !== 'circle' }).toFormat('webp')
+    const img = sharp(image, { animated: isAnimated }).toFormat('webp')
+    
+    switch (type) {
+        case StickerTypes.CROPPED:
+            img.resize(512, 512, {
+                fit: fit.cover
+            })
+            break
 
-    if (type === 'crop')
-        img.resize(512, 512, {
-            fit: fit.cover
-        })
+        case StickerTypes.FULL:
+            img.resize(512, 512, {
+                fit: fit.contain,
+                background
+            })
+            break
 
-    if (type === 'full')
-        img.resize(512, 512, {
-            fit: fit.contain,
-            background
-        })
-
-    if (type === 'circle') {
-        img.resize(512, 512, {
-            fit: fit.cover
-        }).composite([
-            {
-                input: Buffer.from(
-                    `<svg><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`
-                ),
-                blend: 'dest-in',
-                gravity: 'northeast',
-                tile: true
-            }
-        ])
+        case StickerTypes.CIRCLE:
+            img.resize(512, 512, {
+                fit: fit.cover
+            }).composite([
+                {
+                    input: Buffer.from(
+                        `<svg><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`
+                    ),
+                    blend: 'dest-in',
+                    gravity: 'northeast',
+                    tile: true
+                }
+            ])            
+            break
     }
 
     return await img
