@@ -50,7 +50,9 @@ const convert = async (
                 fit: fit.cover
             }).composite([
                 {
-                    input: Buffer.from(`<svg><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`),
+                    input: Buffer.from(
+                        `<svg width="512" height="512"><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`
+                    ),
                     blend: 'dest-in',
                     gravity: 'northeast',
                     tile: true
@@ -64,7 +66,22 @@ const convert = async (
             }).composite([
                 {
                     input: Buffer.from(
-                        `<svg><rect rx="50" ry="50" width="512" height="512" fill="${background}"/></svg>`
+                        `<svg width="512" height="512"><rect rx="50" ry="50" width="512" height="512" fill="${background}"/></svg>`
+                    ),
+                    blend: 'dest-in',
+                    gravity: 'northeast',
+                    tile: true
+                }
+            ])
+            break
+
+        case StickerTypes.STAR:
+            img.resize(512, 512, {
+                fit: fit.cover
+            }).composite([
+                {
+                    input: Buffer.from(
+                        `<svg width="512" height="512"><path d="m256 33.28 61.133 172.083H481.28L347.341 306.432l47.898 177.357L256 377.446 116.787 483.788l47.872-177.357L30.694 205.362h164.147L256 33.28z" fill="${background}"/></svg>`
                     ),
                     blend: 'dest-in',
                     gravity: 'northeast',

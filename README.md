@@ -129,7 +129,8 @@ enum StickerTypes {
     CROPPED = 'crop',
     FULL = 'full',
     CIRCLE = 'circle,
-    ROUNDED = 'rounded'
+    ROUNDED = 'rounded',
+    STAR = 'star'
 }
 
 ```

@@ -7,4 +7,5 @@
     await import('./full')
     await import('./circle')
     await import('./rounded')
+    await import('./star')
 })().catch(console.error)
