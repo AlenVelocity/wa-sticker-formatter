@@ -3,6 +3,5 @@ export enum StickerTypes {
     CROPPED = 'crop',
     FULL = 'full',
     CIRCLE = 'circle',
-    ROUNDED = 'rounded',
-    STAR = 'star'
+    ROUNDED = 'rounded'
 }

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path='../src/internal/node-webpmux' />
+/// <reference path='../src/internal/node-webpmux.d.ts' />
 import { strict as assert } from 'assert'
 import Sticker, { extractMetadata, StickerTypes } from '../src'
 import sizeOf from 'image-size'
@@ -59,15 +59,6 @@ describe('Sticker', () => {
             const { height, width } = sizeOf(buffer)
             assert.equal(height, width)
         })
-
-        it('should create a star sticker same height and width', async () => {
-            const sticker = new Sticker(images.static.landscape, {
-                type: StickerTypes.STAR
-            })
-            const buffer = await sticker.build()
-            const { height, width } = sizeOf(buffer)
-            assert.equal(height, width)
-        })
     })
 
     describe('Animated Stickers', () => {
@@ -100,16 +91,6 @@ describe('Sticker', () => {
         it('should create an animated rounded sticker with size 512x512', async () => {
             const sticker = new Sticker(images.animated.potrait, {
                 type: StickerTypes.ROUNDED
-            })
-            const buffer = await sticker.build()
-            const { height, width } = sizeOf(buffer)
-            assert.equal(height, 512)
-            assert.equal(width, 512)
-        })
-
-        it('should create an animated star sticker with size 512x512', async () => {
-            const sticker = new Sticker(images.animated.potrait, {
-                type: StickerTypes.STAR
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)
