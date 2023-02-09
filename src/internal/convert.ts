@@ -19,33 +19,40 @@ const convert = async (
     if (isAnimated && ['crop', 'circle'].includes(type)) {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
-        ;[image, type] = [await crop(filename), type === 'circle' ? StickerTypes.CIRCLE : StickerTypes.DEFAULT]
+        ;[image, type] = [
+            await crop(filename),
+            type === StickerTypes.CIRCLE ? StickerTypes.CIRCLE : StickerTypes.DEFAULT
+        ]
     }
 
-    const img = sharp(image, { animated: type !== 'circle' }).toFormat('webp')
+    const img = sharp(image, { animated: isAnimated }).toFormat('webp')
 
-    if (type === 'crop')
-        img.resize(512, 512, {
-            fit: fit.cover
-        })
+    switch (type) {
+        case StickerTypes.CROPPED:
+            img.resize(512, 512, {
+                fit: fit.cover
+            })
+            break
 
-    if (type === 'full')
-        img.resize(512, 512, {
-            fit: fit.contain,
-            background
-        })
+        case StickerTypes.FULL:
+            img.resize(512, 512, {
+                fit: fit.contain,
+                background
+            })
+            break
 
-    if (type === 'circle') {
-        img.resize(512, 512, {
-            fit: fit.cover
-        }).composite([
-            {
-                input: Buffer.from(
-                    `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`
-                ),
-                blend: 'dest-in'
-            }
-        ])
+        case StickerTypes.CIRCLE:
+            img.resize(512, 512, {
+                fit: fit.cover
+            }).composite([
+                {
+                    input: Buffer.from(`<svg><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`),
+                    blend: 'dest-in',
+                    gravity: 'northeast',
+                    tile: true
+                }
+            ])
+            break
     }
 
     return await img
