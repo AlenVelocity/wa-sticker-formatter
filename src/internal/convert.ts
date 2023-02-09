@@ -63,7 +63,9 @@ const convert = async (
                 fit: fit.cover
             }).composite([
                 {
-                    input: Buffer.from(`<svg><rect rx="50" ry="50" width="512" height="512" fill="${background}"/></svg>`),
+                    input: Buffer.from(
+                        `<svg><rect rx="50" ry="50" width="512" height="512" fill="${background}"/></svg>`
+                    ),
                     blend: 'dest-in',
                     gravity: 'northeast',
                     tile: true
