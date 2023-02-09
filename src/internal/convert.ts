@@ -14,7 +14,7 @@ const convert = async (
 ): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
     let image = isVideo ? await videoToGif(data) : data
-    const isAnimated = isVideo || mime.includes('gif')
+    const isAnimated = isVideo || mime.includes('gif') || mime.includes('webp')
 
     if (isAnimated && ['crop', 'circle', 'rouded'].includes(type)) {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
