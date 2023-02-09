@@ -41,6 +41,24 @@ describe('Sticker', () => {
             const { height, width } = sizeOf(buffer)
             assert.equal(height, width)
         })
+
+        it('should create a circle sticker same height and width', async () => {
+            const sticker = new Sticker(images.static.landscape, {
+                type: StickerTypes.CIRCLE
+            })
+            const buffer = await sticker.build()
+            const { height, width } = sizeOf(buffer)
+            assert.equal(height, width)
+        })
+
+        it('should create a rounded sticker same height and width', async () => {
+            const sticker = new Sticker(images.static.landscape, {
+                type: StickerTypes.ROUNDED
+            })
+            const buffer = await sticker.build()
+            const { height, width } = sizeOf(buffer)
+            assert.equal(height, width)
+        })
     })
 
     describe('Animated Stickers', () => {
@@ -53,6 +71,26 @@ describe('Sticker', () => {
         it('should create an animated sticker with size 512x512', async () => {
             const sticker = new Sticker(images.animated.potrait, {
                 type: StickerTypes.CROPPED
+            })
+            const buffer = await sticker.build()
+            const { height, width } = sizeOf(buffer)
+            assert.equal(height, 512)
+            assert.equal(width, 512)
+        })
+
+        it('should create an animated circle sticker with size 512x512', async () => {
+            const sticker = new Sticker(images.animated.potrait, {
+                type: StickerTypes.CIRCLE
+            })
+            const buffer = await sticker.build()
+            const { height, width } = sizeOf(buffer)
+            assert.equal(height, 512)
+            assert.equal(width, 512)
+        })
+
+        it('should create an animated rounded sticker with size 512x512', async () => {
+            const sticker = new Sticker(images.animated.potrait, {
+                type: StickerTypes.ROUNDED
             })
             const buffer = await sticker.build()
             const { height, width } = sizeOf(buffer)

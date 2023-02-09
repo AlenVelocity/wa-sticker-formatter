@@ -1,7 +1,7 @@
 import { Sticker } from '../src'
 ;(async () => {
     console.log('\n---\n')
-    console.log('Circle example')
+    console.log('Rounded example')
     console.log('---\n')
     const images = {
         static: {
@@ -13,7 +13,7 @@ import { Sticker } from '../src'
             landscape: 'https://c.tenor.com/2RdLoyV5VPsAAAAC/ayame-nakiri.gif'
         }
     }
-    const type = 'circle'
+    const type = 'rounded'
     const getOptions = (pack = '', author = '') => ({
         pack,
         type,

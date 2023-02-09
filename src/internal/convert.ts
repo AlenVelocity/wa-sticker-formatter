@@ -16,12 +16,16 @@ const convert = async (
     let image = isVideo ? await videoToGif(data) : data
     const isAnimated = isVideo || mime.includes('gif')
 
-    if (isAnimated && ['crop', 'circle'].includes(type)) {
+    if (isAnimated && ['crop', 'circle', 'rouded'].includes(type)) {
         const filename = `${tmpdir()}/${Math.random().toString(36)}.webp`
         await writeFile(filename, image)
         ;[image, type] = [
             await crop(filename),
-            type === StickerTypes.CIRCLE ? StickerTypes.CIRCLE : StickerTypes.DEFAULT
+            type === StickerTypes.CIRCLE
+                ? StickerTypes.CIRCLE
+                : type === StickerTypes.ROUNDED
+                ? StickerTypes.ROUNDED
+                : StickerTypes.DEFAULT
         ]
     }
 
@@ -47,6 +51,19 @@ const convert = async (
             }).composite([
                 {
                     input: Buffer.from(`<svg><circle cx="256" cy="256" r="256" fill="${background}"/></svg>`),
+                    blend: 'dest-in',
+                    gravity: 'northeast',
+                    tile: true
+                }
+            ])
+            break
+
+        case StickerTypes.ROUNDED:
+            img.resize(512, 512, {
+                fit: fit.cover
+            }).composite([
+                {
+                    input: Buffer.from(`<svg><rect rx="50" ry="50" width="512" height="512" fill="${background}"/></svg>`),
                     blend: 'dest-in',
                     gravity: 'northeast',
                     tile: true

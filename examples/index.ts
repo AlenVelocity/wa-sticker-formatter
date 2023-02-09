@@ -6,4 +6,5 @@
     await import('./crop')
     await import('./full')
     await import('./circle')
+    await import('./rounded')
 })().catch(console.error)
