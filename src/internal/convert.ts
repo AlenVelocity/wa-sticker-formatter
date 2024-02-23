@@ -79,7 +79,7 @@ const convert = async (
     if (forceCompression && quality > 100) {
         quality = 100
         let compressed = await img.toBuffer()
-        while (compressed.length > 1024 * 1024 && quality > 0) {
+        while (compressed.length > (1024 * 1024) && quality > 1) {
             quality == 5 ? (quality = 1) : (quality -= 5)
             compressed = await img.webp({ quality: quality }).toBuffer()
         }
