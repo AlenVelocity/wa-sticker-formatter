@@ -10,7 +10,7 @@ import { IStickerOptions } from '..'
 const convert = async (
     data: Buffer,
     mime: string,
-    { quality = 100, background = defaultBg, type = StickerTypes.DEFAULT }: IStickerOptions
+    { quality = 101, background = defaultBg, type = StickerTypes.DEFAULT, forceCompression = false }: IStickerOptions
 ): Promise<Buffer> => {
     const isVideo = mime.startsWith('video')
     let image = isVideo ? await videoToGif(data) : data
@@ -75,6 +75,16 @@ const convert = async (
             ])
             break
     }
+
+    if (forceCompression && quality > 100) {
+        quality = 100
+        let compressed = await img.toBuffer()
+        while (compressed.length > 1024 * 1024 && quality > 0) {
+            quality == 5 ? (quality = 1) : (quality -= 5)
+            compressed = await img.webp({ quality: quality }).toBuffer()
+        }
+        return compressed
+    } else if (quality > 100) quality = 100
 
     return await img
         .webp({

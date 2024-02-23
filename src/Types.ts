@@ -14,7 +14,8 @@ export interface IStickerConfig {
 }
 
 export interface IStickerOptions extends IStickerConfig {
-    /** How you want your sticker to look like
+    /** 
+     * How you want your sticker to look like
      * Can be crop or full. Defaults to 'default' (no changes)
      */
     type?: StickerTypes | string
@@ -27,6 +28,12 @@ export interface IStickerOptions extends IStickerConfig {
      * Background Color of the sticker (only for type full)
      */
     background?: Color
+    /**
+     * Force webp compression. Defaults to false
+     * If true, it will compress the sticker to under 1MB
+     * Ignored if quality is set
+     */
+    forceCompression?: boolean
 }
 
 export interface IRawMetadata {
