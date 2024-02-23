@@ -46,19 +46,19 @@
     "eslint": "^7.32.0",
     "mocha": "^9.1.1",
     "prettier": "^2.3.2",
-    "release-it": "^14.11.6",
+    "release-it": "^17.1.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
     "typedoc": "^0.21.5",
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.7",
     "file-type": "^16.5.3",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.0.0",
     "image-size": "^1.0.0",
     "node-webpmux": "^3.1.0",
-    "sharp": "^0.30.0"
+    "sharp": "^0.33.2"
   }
 }
