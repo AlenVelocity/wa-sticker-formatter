@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, typecheck and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run fmt:check
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run check:package
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+
+  test:
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}${{ matrix.sharp && format(' (sharp {0})', matrix.sharp) || '' }}
+    needs: check
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: [20, 22, 24, 26]
+        include:
+          - os: ubuntu-24.04-arm
+            node: 24
+          - os: windows-latest
+            node: 24
+          - os: macos-latest
+            node: 24
+          - os: ubuntu-latest
+            node: 22
+            sharp: 0.34.5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - if: matrix.sharp
+        run: npm install --no-save sharp@${{ matrix.sharp }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+      # Video tests are skipped when ffmpeg is missing, which is what the macOS job checks
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - if: runner.os == 'Windows'
+        run: choco install ffmpeg -y --no-progress
+      - run: npm test

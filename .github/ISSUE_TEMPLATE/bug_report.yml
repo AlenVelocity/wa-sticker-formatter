@@ -1,0 +1,47 @@
+name: Bug report
+description: Something doesn't work, crashes or makes a broken sticker
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Installation errors from `sharp` ("Something went wrong installing the sharp module", "Could not load the sharp module") are usually fixed by the steps in the README's Troubleshooting section, so please check there first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you expected, what happened instead, and the full error message.
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Code
+      description: The smallest piece of code that shows the problem.
+      render: ts
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input file
+      description: If a specific image, GIF or video breaks, attach it or link to it (zip it if GitHub refuses the format).
+  - type: input
+    id: version
+    attributes:
+      label: wa-sticker-formatter version
+      placeholder: '5.0.0'
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        Your OS (Ubuntu, Windows, Termux, Docker image...), CPU architecture and how you run your bot.
+        From your project folder, run these and paste the output:
+        `node -p "[process.version, process.platform, process.arch, require('sharp').versions.sharp].join(' ')"`
+        `ffmpeg -version` (first line; only needed for video stickers)
+      render: text
+    validations:
+      required: true
