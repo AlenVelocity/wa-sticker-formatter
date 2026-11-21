@@ -1,205 +1,187 @@
-import { existsSync, readFile, writeFile } from 'fs-extra'
-import { IStickerConfig, IStickerOptions } from './Types'
-import axios from 'axios'
-import Utils, { defaultBg } from './Utils'
-import { fromBuffer } from 'file-type'
-import convert from './internal/convert'
+import { writeFile } from 'node:fs/promises'
+import type { Color } from 'sharp'
+import { extractMetadata } from './extractMetadata'
+import { convert } from './internal/convert'
+import { readInput, type StickerInput } from './internal/input'
 import Exif from './internal/Metadata/Exif'
-import { StickerTypes } from './internal/Metadata/StickerTypes'
-import { Categories, extractMetadata } from '.'
-import { Color } from 'sharp'
+import { StickerTypes, isStickerType } from './internal/Metadata/StickerTypes'
+import type { Categories, IStickerOptions } from './Types'
+import Utils, { defaultBg } from './Utils'
+
+/** Default `maxSize`: 1 MB. WhatsApp may not play animated stickers bigger than this. */
+const DEFAULT_MAX_SIZE = 1024 * 1024
+
+/** Room for the EXIF chunk and the RIFF headers that wrap it */
+const EXIF_OVERHEAD = 64
+
+/** A finished sticker, ready to send with Baileys: `sock.sendMessage(jid, message)` */
+export interface StickerMessage {
+    sticker: Buffer
+    isAnimated: boolean
+    width: number
+    height: number
+}
 
 /**
- * Sticker class
+ * A WhatsApp sticker made from an image, GIF, video or SVG.
+ * @example
+ * const sticker = new Sticker('./image.png', { pack: 'My Pack', author: 'Me', type: StickerTypes.FULL })
+ * await sticker.toFile('sticker.webp')
  */
 export class Sticker {
+    /** Sticker options. Missing values are filled in with defaults. */
+    public metadata: IStickerOptions
+
+    private readonly data: StickerInput
+
     /**
-     * Sticker Constructor
-     * @param {string|Buffer} [data] - File path, url or Buffer of the image/video to be converted
-     * @param {IStickerOptions} [options] - Sticker options
+     * @param data - Buffer, file path, URL, SVG string or readable stream of an image, GIF or video
+     * @param metadata - Sticker options
      */
-    constructor(private data: string | Buffer, public metadata: Partial<IStickerOptions> = {}) {
-        this.metadata.author = this.metadata.author ?? ''
-        this.metadata.pack = this.metadata.pack ?? ''
-        this.metadata.id = this.metadata.id ?? Utils.generateStickerID()
-        this.metadata.quality = this.metadata.quality ?? 100
-        this.metadata.type = Object.values(StickerTypes).includes(this.metadata.type as StickerTypes)
-            ? this.metadata.type
-            : StickerTypes.DEFAULT
-        this.metadata.background = this.metadata.background ?? defaultBg
+    constructor(data: StickerInput, metadata: Partial<IStickerOptions> = {}) {
+        this.data = data
+        this.metadata = {
+            ...metadata,
+            author: metadata.author ?? '',
+            pack: metadata.pack ?? '',
+            id: metadata.id ?? Utils.generateStickerID(),
+            type: isStickerType(metadata.type) ? metadata.type : StickerTypes.DEFAULT,
+            background: metadata.background ?? defaultBg
+        }
     }
 
-    private _parse = async (): Promise<Buffer> =>
-        Buffer.isBuffer(this.data)
-            ? this.data
-            : this.data.trim().startsWith('<svg')
-            ? Buffer.from(this.data)
-            : (async () =>
-                  existsSync(this.data)
-                      ? readFile(this.data)
-                      : axios.get(this.data as string, { responseType: 'arraybuffer' }).then(({ data }) => data))()
-
-    private _getMimeType = async (data: Buffer): Promise<string> => {
-        const type = await fromBuffer(data)
-        if (!type) {
-            if (typeof this.data === 'string') return 'image/svg+xml'
-            throw new Error('Invalid file type')
+    private async process(): Promise<StickerMessage> {
+        const { type, background, quality, maxSize = DEFAULT_MAX_SIZE, fps = 15, maxDuration = 10 } = this.metadata
+        const exif = new Exif(this.metadata)
+        const limit =
+            Number.isFinite(maxSize) && maxSize > 0 ? Math.max(1, maxSize - exif.build().length - EXIF_OVERHEAD) : 0
+        const result = await convert(await readInput(this.data), {
+            type: isStickerType(type) ? type : StickerTypes.DEFAULT,
+            background: background ?? defaultBg,
+            quality,
+            maxSize: limit,
+            fps: Math.min(30, Math.max(1, fps)),
+            maxDuration: maxDuration > 0 ? maxDuration : 10
+        })
+        return {
+            sticker: await exif.add(result.data),
+            isAnimated: result.animated,
+            width: result.width,
+            height: result.height
         }
-        return type.mime
     }
 
     /**
      * Builds the sticker
-     * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+     * @returns The sticker as a WebP buffer
      * @example
-     * const sticker = new Sticker('./image.png')
-     * const buffer = sticker.build()
+     * const buffer = await new Sticker('./image.png').build()
      */
-    public build = async (): Promise<Buffer> => {
-        const data = await this._parse()
-        const mime = await this._getMimeType(data)
-        return new Exif(this.metadata as IStickerConfig).add(await convert(data, mime, this.metadata))
+    public async build(): Promise<Buffer> {
+        return (await this.process()).sticker
     }
 
     /**
-     * Alias for `.build()`
-     * @param {string} [type] - How you want your sticker to look like
-     * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
-     * @example
-     * const sticker = new Sticker('./image.png')
-     * const buffer = sticker.build()
+     * Alias for `build()`
+     * @returns The sticker as a WebP buffer
      */
-    public toBuffer = this.build
+    public toBuffer(): Promise<Buffer> {
+        return this.build()
+    }
 
+    /**
+     * @deprecated Use `build()` or `toBuffer()` instead
+     */
+    public get(): Promise<Buffer> {
+        return this.build()
+    }
+
+    /** Filename used by `toFile()` when none is given */
     public get defaultFilename(): string {
         return `./${this.metadata.pack}-${this.metadata.author}.webp`
     }
 
     /**
      * Saves the sticker to a file
-     * @param [filename] - Filename to save the sticker to
-     * @returns filename
-     * @example
-     * const sticker = new Sticker('./image.png')
-     * sticker.toFile('./image.webp')
+     * @param filename - Where to save the sticker. Defaults to `./<pack>-<author>.webp`
+     * @returns The filename
      */
-    public toFile = async (filename = this.defaultFilename): Promise<string> => {
+    public async toFile(filename = this.defaultFilename): Promise<string> {
         await writeFile(filename, await this.build())
         return filename
     }
 
     /**
-     * Set the sticker pack title
-     * @param pack - Sticker Pack Title
-     * @returns {this}
+     * Builds a message object for Baileys' `sendMessage`. It includes `isAnimated`,
+     * which WhatsApp uses to play animated stickers.
      * @example
-     * const sticker = new Sticker('./image.png')
-     * sticker.setPack('My Sticker Pack')
-     * sticker.build()
+     * await sock.sendMessage(jid, await sticker.toMessage(), { quoted: msg })
      */
-    public setPack = (pack: string): this => {
+    public toMessage(): Promise<StickerMessage> {
+        return this.process()
+    }
+
+    /** Sets the sticker pack name */
+    public setPack(pack: string): this {
         this.metadata.pack = pack
         return this
     }
 
-    /**
-     * Set the sticker pack author
-     * @param author - Sticker Pack Author
-     * @returns
-     */
-    public setAuthor = (author: string): this => {
+    /** Sets the sticker pack author */
+    public setAuthor(author: string): this {
         this.metadata.author = author
         return this
     }
 
-    /**
-     * Set the sticker pack ID
-     * @param id - Sticker Pack ID
-     * @returns {this}
-     * @example
-     * const sticker = new Sticker('./image.png')
-     * sticker.setID('my-sticker-pack')
-     * sticker.build()
-     */
-    public setID = (id: string): this => {
+    /** Sets the sticker pack ID */
+    public setID(id: string): this {
         this.metadata.id = id
         return this
     }
 
+    /** Alias for `setID()` */
+    public setId(id: string): this {
+        return this.setID(id)
+    }
+
     /**
-     * Set the sticker category
-     * @param categories - Sticker Category
-     * @returns {this}
+     * Sets the sticker's emoji categories
      * @example
-     * const sticker = new Sticker('./image.png')
-     * sticker.setCategories(['🌹'])
+     * sticker.setCategories(['🤩', '🎉'])
      */
-    public setCategories = (categories: Categories[]): this => {
+    public setCategories(categories: Categories[]): this {
         this.metadata.categories = categories
         return this
     }
 
-    /**
-     * Set the sticker type
-     * @param {StickerTypes|string}[type] - Sticker Type
-     * @returns {this}
-     */
-    public setType = (type: StickerTypes | string): this => {
+    /** Sets how the input is fitted into the sticker. See {@link StickerTypes}. */
+    public setType(type: StickerTypes | (string & {})): this {
         this.metadata.type = type
         return this
     }
 
-    /**
-     * Set the sticker quality
-     * @param {number}[quality] - Sticker Quality
-     * @returns {this}
-     */
-    public setQuality = (quality: number): this => {
+    /** Sets the WebP quality, from 1 to 100 */
+    public setQuality(quality: number): this {
         this.metadata.quality = quality
         return this
     }
 
-    /**
-     * Set the background color for `full` images
-     * @param {Color}[background] - Background color
-     * @returns {this}
-     */
-    public setBackground = (background: Color): this => {
+    /** Sets the background colour for `full` stickers */
+    public setBackground(background: Color): this {
         this.metadata.background = background
         return this
     }
 
     /**
-     * @deprecated
-     * Use the `Sticker.build()` method instead
-     */
-    public get = this.build
-
-    /**
-     * Get BaileysMD-compatible message object
-     * @returns {{ sticker: Buffer }}
-     * @example
-     * import { create } from '@adiwajshing/baileys-md'
-     * const conn = create()
-     * ...
-     * const sticker = new Sticker('./image.png', { pack: 'My Sticker Pack', author: 'Me' })
-     * const message = await sticker.toMessage()
-     * conn.sendMessage(jid, message)
-     */
-    public toMessage = async (): Promise<{ sticker: Buffer }> => ({ sticker: await this.build() })
-
-    /**
-     * Extracts metadata from a WebP image.
-     * @param {Buffer}image - The image buffer to extract metadata from
+     * Reads the metadata from a WebP sticker
+     * @param image - The WebP sticker
      */
     public static extractMetadata = extractMetadata
 }
 
 /**
- *
- * @param {string|Buffer} data - File path, url or Buffer of the image/video to be converted
- * @param {IStickerOptions} [options] - Sticker options
- * @returns {Promise<Buffer>} A promise that resolves to the sticker buffer
+ * Makes a sticker in one call. Takes the same arguments as the `Sticker` constructor.
+ * @returns The sticker as a WebP buffer
  */
 export const createSticker = async (...args: ConstructorParameters<typeof Sticker>): Promise<Buffer> => {
     return new Sticker(...args).build()

@@ -1,8 +1,12 @@
 {
-    "entryPoints": ["./src/index.ts"],
-    "excludePrivate": true,
-    "excludeProtected": true,
-    "excludeExternals": true,
-    "includeVersion": true,
-    "out": "docs"
+  "entryPoints": ["./src/index.ts"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "includeVersion": true,
+  "readme": "./README.md",
+  "out": "docs",
+  "validation": {
+    "notExported": false
+  }
 }
