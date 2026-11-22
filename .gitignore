@@ -1,4 +1,9 @@
-node_modules
-/dist
+node_modules/
+dist/
+docs/
+examples/output/
 *.webp
+*.tgz
 yarn.lock
+pnpm-lock.yaml
+.DS_Store

@@ -1,23 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": [
-      "ESNext"
-    ],                         
-    "module": "commonjs",
-    "declaration": true,                     
-    "outDir": "./dist",                        
-    "resolveJsonModule": true,
-    "strict": true,                           
-    "esModuleInterop": true,                  
-    "skipLibCheck": true,                     
-    "forceConsistentCasingInFileNames": true  
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "tests/**/*"
-  ]
+  "include": ["src", "examples", "tsdown.config.ts"]
 }

@@ -1,15 +1,24 @@
-import { Categories, IStickerConfig, IStickerOptions } from '../../Types'
+import type { Categories, IStickerConfig } from '../../Types'
 import Utils from '../../Utils'
 
-export default class StickerMetadata implements IStickerOptions {
+/**
+ * Builder for sticker metadata, kept from v3.
+ * @deprecated Pass options to `new Sticker(input, options)` or use the `Sticker` setters instead.
+ */
+export default class StickerMetadata implements IStickerConfig {
     public crop = false
     public full = false
-    constructor(
-        public pack = '',
-        public author = '',
-        public categories: Categories[] = [],
-        public id = Utils.generateStickerID()
-    ) {}
+    public pack: string
+    public author: string
+    public categories: Categories[]
+    public id: string
+
+    constructor(pack = '', author = '', categories: Categories[] = [], id = Utils.generateStickerID()) {
+        this.pack = pack
+        this.author = author
+        this.categories = categories
+        this.id = id
+    }
 
     static from = (object: Partial<StickerMetadata>): StickerMetadata => {
         return new StickerMetadata(object.pack, object.author, object.categories, object.id)
@@ -43,18 +52,17 @@ export default class StickerMetadata implements IStickerOptions {
     }
 
     public setCategories = (categories: string | string[]): this => {
-        this.categories = (
+        this.categories =
             typeof categories === 'string' ? categories.split(',').map((emoji) => emoji.trim()) : categories
-        ) as Categories[]
         return this
     }
 
-    public toJSON = (): IStickerConfig => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const obj: any = {}
-        Object.keys(this)
-            .filter((key) => typeof this[key as keyof this] !== 'function')
-            .forEach((key) => (obj[key] = this[key as keyof IStickerConfig] as IStickerConfig[keyof IStickerConfig]))
-        return obj as IStickerConfig
-    }
+    public toJSON = (): IStickerConfig & { crop: boolean; full: boolean } => ({
+        crop: this.crop,
+        full: this.full,
+        pack: this.pack,
+        author: this.author,
+        categories: this.categories,
+        id: this.id
+    })
 }

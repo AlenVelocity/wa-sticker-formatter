@@ -1,29 +1,47 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "4.4.4",
-  "description": "Sticker Creator for WhatsApp",
-  "main": "dist",
-  "types": "dist",
+  "version": "5.0.0",
+  "description": "Create WhatsApp stickers from images, GIFs and videos, with pack name, author and emoji metadata",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc -p .",
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "test": "node --test --test-reporter=spec",
+    "check": "npm run lint && npm run fmt:check && npm run typecheck && npm run build && npm test",
+    "check:package": "publint --strict && attw --pack . --profile node16",
     "doc": "typedoc",
-    "lint": "eslint \"src/**/*.ts\"",
-    "prepublish": "npm run build",
-    "fmt": "prettier --config .prettierrc \"**/*.{ts,mjs}\" --write",
-    "test": "mocha --timeout 60000 -r ts-node/register \"tests/**/*.test.ts\"",
-    "clean:webp": "find ./ -name '*.webp' -delete",
-    "release": "release-it",
-    "examples": "ts-node ./examples/index.ts"
+    "example": "tsx examples/cli.ts",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "whatsapp",
     "stickers",
     "whatsapp-stickers",
-    "webp"
+    "sticker",
+    "webp",
+    "baileys",
+    "whatsapp-bot",
+    "exif"
   ],
   "author": {
     "name": "Alen Yohannan",
@@ -31,34 +49,39 @@
     "url": "https://github.com/AlenVelocity"
   },
   "license": "MIT",
+  "homepage": "https://github.com/AlenVelocity/wa-sticker-formatter#readme",
   "repository": {
-    "url": "https://github.com/AlenVelocity/wa-sticker-formatter"
+    "type": "git",
+    "url": "git+https://github.com/AlenVelocity/wa-sticker-formatter.git"
   },
-  "issues": "https://github.com/AlenVelocity/wa-sticker-formatter/issues",
-  "devDependencies": {
-    "@types/fluent-ffmpeg": "^2.1.18",
-    "@types/fs-extra": "^9.0.13",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^16.4.13",
-    "@types/sharp": "^0.28.5",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
-    "eslint": "^7.32.0",
-    "mocha": "^9.1.1",
-    "prettier": "^2.3.2",
-    "release-it": "^14.11.6",
-    "rimraf": "^3.0.2",
-    "ts-node": "^10.2.1",
-    "typedoc": "^0.21.5",
-    "typescript": "^4.3.5"
+  "bugs": {
+    "url": "https://github.com/AlenVelocity/wa-sticker-formatter/issues"
   },
+  "funding": "https://ko-fi.com/alen01",
   "dependencies": {
-    "axios": "^0.21.1",
-    "file-type": "^16.5.3",
-    "fluent-ffmpeg": "^2.1.2",
-    "fs-extra": "^10.0.0",
-    "image-size": "^1.0.0",
-    "node-webpmux": "^3.1.0",
-    "sharp": "^0.30.0"
+    "node-webpmux": "^3.2.1",
+    "sharp": "^0.34.2 || ^0.35.0"
+  },
+  "peerDependencies": {
+    "ffmpeg-static": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ffmpeg-static": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^20.19.43",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "publint": "^0.3.25",
+    "tsdown": "^0.23.7",
+    "tsx": "^4.23.15",
+    "typedoc": "^0.28.20",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0"
   }
 }
