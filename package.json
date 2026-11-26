@@ -1,6 +1,6 @@
 {
   "name": "wa-sticker-formatter",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Create WhatsApp stickers from images, GIFs and videos, with pack name, author and emoji metadata",
   "type": "module",
   "main": "./dist/index.cjs",
