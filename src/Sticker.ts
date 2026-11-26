@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises'
 import type { Color } from 'sharp'
 import { extractMetadata } from './extractMetadata'
+import { encodeAudio } from './internal/audio'
 import { convert } from './internal/convert'
 import { readInput, type StickerInput } from './internal/input'
 import Exif from './internal/Metadata/Exif'
@@ -20,6 +21,19 @@ export interface StickerMessage {
     isAnimated: boolean
     width: number
     height: number
+}
+
+/**
+ * A sticker with sound, from `toSoundSticker()`. Don't pass this object to Baileys' `sendMessage`,
+ * which doesn't support sound stickers and would send it without the sound. See the README for how to send it.
+ */
+export interface SoundSticker extends StickerMessage {
+    /** The sound, as Ogg Opus (mono, 48 kHz). Upload it as `audio/ogg; codecs=opus`. */
+    audio: Buffer
+    /** Length of the sound in whole seconds, for `audioMessage.seconds` */
+    seconds: number
+    /** 64 loudness values from 0 to 100, for `audioMessage.waveform` */
+    waveform: Uint8Array
 }
 
 /**
@@ -50,18 +64,23 @@ export class Sticker {
         }
     }
 
-    private async process(): Promise<StickerMessage> {
-        const { type, background, quality, maxSize = DEFAULT_MAX_SIZE, fps = 15, maxDuration = 10 } = this.metadata
+    private get maxDuration(): number {
+        const { maxDuration = 10 } = this.metadata
+        return maxDuration > 0 ? maxDuration : 10
+    }
+
+    private async process(input?: Buffer): Promise<StickerMessage> {
+        const { type, background, quality, maxSize = DEFAULT_MAX_SIZE, fps = 15 } = this.metadata
         const exif = new Exif(this.metadata)
         const limit =
             Number.isFinite(maxSize) && maxSize > 0 ? Math.max(1, maxSize - exif.build().length - EXIF_OVERHEAD) : 0
-        const result = await convert(await readInput(this.data), {
+        const result = await convert(input ?? (await readInput(this.data)), {
             type: isStickerType(type) ? type : StickerTypes.DEFAULT,
             background: background ?? defaultBg,
             quality,
             maxSize: limit,
             fps: Math.min(30, Math.max(1, fps)),
-            maxDuration: maxDuration > 0 ? maxDuration : 10
+            maxDuration: this.maxDuration
         })
         return {
             sticker: await exif.add(result.data),
@@ -119,6 +138,31 @@ export class Sticker {
      */
     public toMessage(): Promise<StickerMessage> {
         return this.process()
+    }
+
+    /**
+     * Builds a sticker with sound: the animated WebP plus an Ogg Opus audio track. WhatsApp sends
+     * the two as separate files, so `sticker` has no sound in it. See the README for sending it with
+     * Baileys and `patchBaileysProto()`.
+     *
+     * Sound stickers must be animated, so the input has to be a video, GIF or animated WebP.
+     * Both the animation and the sound are cut to `maxDuration` (10 seconds by default).
+     * @param audio - Where the sound comes from. Defaults to the input video's own audio track.
+     *   Pass any audio or video file (Buffer, path, URL or stream) to use that sound instead.
+     * @example
+     * const sound = await new Sticker('./clip.mp4').toSoundSticker()
+     * const meme = await new Sticker('./dance.gif').toSoundSticker('./bruh.mp3')
+     */
+    public async toSoundSticker(audio?: StickerInput): Promise<SoundSticker> {
+        const input = await readInput(this.data)
+        const message = await this.process(input)
+        if (!message.isAnimated) {
+            throw new Error(
+                'Sound stickers must be animated. Make them from a video, GIF or animated WebP, not a still image.'
+            )
+        }
+        const track = await encodeAudio(audio === undefined ? input : await readInput(audio), this.maxDuration)
+        return { ...message, audio: track.data, seconds: track.seconds, waveform: track.waveform }
     }
 
     /** Sets the sticker pack name */

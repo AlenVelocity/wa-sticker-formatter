@@ -1,0 +1,33 @@
+// legacy.proto plus the two sound sticker fields, as WhatsApp defines them.
+syntax = "proto3";
+package proto;
+
+message Message {
+    optional string conversation = 1;
+    optional StickerMessage stickerMessage = 26;
+    optional FutureProofMessage viewOnceMessage = 37;
+    optional FutureProofMessage audioStickerMessage = 134;
+
+    message StickerMessage {
+        optional string url = 1;
+        optional string mimetype = 5;
+        optional uint32 height = 6;
+        optional uint32 width = 7;
+        optional bool isAnimated = 13;
+        oneof audio {
+            AudioMessage audioMessage = 26;
+        }
+    }
+
+    message AudioMessage {
+        optional string url = 1;
+        optional string mimetype = 2;
+        optional uint32 seconds = 5;
+        optional bool ptt = 6;
+        optional bytes waveform = 19;
+    }
+
+    message FutureProofMessage {
+        optional Message message = 1;
+    }
+}

@@ -1,6 +1,7 @@
 import { Sticker } from './Sticker'
 
-export { Sticker, createSticker, type StickerMessage } from './Sticker'
+export { Sticker, createSticker, type StickerMessage, type SoundSticker } from './Sticker'
+export { patchBaileysProto } from './baileys'
 export { extractMetadata, parseExif, type ExtractedMetadata } from './extractMetadata'
 export type * from './Types'
 export type { StickerInput } from './internal/input'
