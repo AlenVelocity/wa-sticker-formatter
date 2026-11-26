@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -69,6 +69,53 @@ export const video = ({ seconds = 2, size = '640x360', rate = 30, format = 'mp4'
 }
 
 export const mp4 = (options = {}) => video({ ...options, args: ['-c:v', 'libx264', '-pix_fmt', 'yuv420p'] })
+
+/** Runs ffmpeg with the given arguments and returns the file it wrote */
+const generate = (args, ext) => {
+    const dir = mkdtempSync(join(tmpdir(), 'wsf-test-'))
+    const file = join(dir, `out.${ext}`)
+    try {
+        const result = spawnSync(ffmpegBin, ['-hide_banner', '-loglevel', 'error', '-y', ...args, file], {
+            encoding: 'utf8'
+        })
+        if (result.status !== 0) throw new Error(`ffmpeg failed: ${result.stderr}`)
+        return readFileSync(file)
+    } finally {
+        rmSync(dir, { recursive: true, force: true })
+    }
+}
+
+/** MP4 with a stereo 440 Hz tone as its sound */
+export const mp4WithSound = ({ seconds = 2 } = {}) =>
+    generate(
+        [
+            ...['-f', 'lavfi', '-i', 'testsrc2=size=640x360:rate=30'],
+            ...['-f', 'lavfi', '-i', 'sine=frequency=440:sample_rate=44100'],
+            ...['-t', String(seconds), '-ac', '2'],
+            ...['-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac']
+        ],
+        'mp4'
+    )
+
+/** Audio file that is silent for the first `silence` seconds, then plays a tone */
+export const tone = ({ seconds = 3, silence = 0, format = 'wav' } = {}) =>
+    generate(
+        ['-f', 'lavfi', '-i', `aevalsrc='if(gte(t,${silence}),0.5*sin(2*PI*440*t),0)':s=44100:d=${seconds}`],
+        format
+    )
+
+/** The streams ffmpeg sees in a file, e.g. "Audio: opus, 48000 Hz, mono, fltp" */
+export const streams = (data) => {
+    const dir = mkdtempSync(join(tmpdir(), 'wsf-test-'))
+    const file = join(dir, 'probe')
+    try {
+        writeFileSync(file, data)
+        const { stderr } = spawnSync(ffmpegBin, ['-hide_banner', '-i', file], { encoding: 'utf8' })
+        return [...stderr.matchAll(/Stream #\d+:\d+[^:]*: (.*)/g)].map((m) => m[1].trim())
+    } finally {
+        rmSync(dir, { recursive: true, force: true })
+    }
+}
 
 /** VP9 WebM with a transparent background, like a Telegram video sticker */
 export const transparentWebm = () => {

@@ -56,6 +56,72 @@ sock.ev.on('messages.upsert', async ({ messages }) => {
 
 `isAnimated` matters: Baileys doesn't detect it, and without it some WhatsApp clients won't play the animation.
 
+### Stickers with sound
+
+WhatsApp is rolling out stickers that play a sound when tapped. A sound sticker is an ordinary animated WebP plus an Ogg Opus audio file. The two are uploaded separately and sent together in a new `audioStickerMessage`. `toSoundSticker()` makes both files:
+
+```ts
+const sound = await new Sticker('./clip.mp4', { pack: 'My Pack' }).toSoundSticker() // the video's own sound
+const meme = await new Sticker('./dance.gif').toSoundSticker('./bruh.mp3') // any audio or video file
+// { sticker, isAnimated, width, height, audio, seconds, waveform }
+```
+
+The sticker has to be animated, so the input must be a video, GIF or animated WebP. The sound is cut to `maxDuration`, like the animation. Making the audio needs ffmpeg, even for GIFs.
+
+What we measured by sending sound stickers from Baileys to an Android phone in November 2026:
+
+- Keep the sticker under 1 MB, as `maxSize` does by default. Stickers of 1.4 MB and more showed a download button and didn't play.
+- Animations of 20 and 30 seconds played with their sound. To go past 10 seconds, raise `maxDuration`; the quality drops to fit 1 MB.
+- A 4-second animation played a 2-minute sound to the end. To use a sound longer than the animation, pass a short video and set `maxDuration` to the length of the sound.
+
+WhatsApp's own sticker editor uses much shorter sounds, so other WhatsApp versions may be stricter.
+
+Baileys 7.0.0-rc14 doesn't know the new message fields yet and silently sends an empty message. `patchBaileysProto()` adds them. Call it once at startup; it does nothing for fields your Baileys version already has. `sendMessage` doesn't support sound stickers, so upload both files and relay the message yourself:
+
+```ts
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from 'baileys'
+import { patchBaileysProto, type SoundSticker } from 'wa-sticker-formatter'
+
+patchBaileysProto(proto)
+
+const sendSoundSticker = async (jid: string, sound: SoundSticker) => {
+    const upload = { upload: sock.waUploadToServer }
+    const { audioMessage } = await prepareWAMessageMedia(
+        { audio: sound.audio, mimetype: 'audio/ogg; codecs=opus', ptt: false, seconds: sound.seconds },
+        upload
+    )
+    const { stickerMessage } = await prepareWAMessageMedia(
+        { sticker: sound.sticker, isAnimated: true, width: sound.width, height: sound.height },
+        upload
+    )
+    // Baileys' types don't have the new fields yet, hence the cast
+    const content = {
+        audioStickerMessage: {
+            message: { stickerMessage: { ...stickerMessage, audioMessage: { ...audioMessage, waveform: sound.waveform } } }
+        }
+    } as proto.IMessage
+    const msg = generateWAMessageFromContent(jid, content, { userJid: sock.user!.id })
+    await sock.relayMessage(jid, msg.message!, { messageId: msg.key.id! })
+}
+
+await sendSoundSticker(jid, await new Sticker(video).toSoundSticker())
+```
+
+Don't pass a `SoundSticker` straight to `sendMessage`: it would go out without its sound.
+
+The patch also lets Baileys decode sound stickers you receive. `downloadMediaMessage()` throws on them, so download the two parts with `downloadContentFromMessage()`:
+
+```ts
+const stickerMessage = (msg.message as any)?.audioStickerMessage?.message?.stickerMessage
+if (stickerMessage?.audioMessage) {
+    // Both are streams, which Sticker also accepts as input
+    const webp = await downloadContentFromMessage(stickerMessage, 'sticker')
+    const sound = await downloadContentFromMessage(stickerMessage.audioMessage, 'audio')
+}
+```
+
+The message format comes from reverse engineering by the community. WhatsApp hasn't published it, and it may change while the feature is in beta.
+
 ### Input
 
 The first argument can be:
@@ -119,6 +185,7 @@ const buffer = await new Sticker(input)
 const buffer = await sticker.build() // WebP Buffer (toBuffer() is an alias)
 const file = await sticker.toFile('sticker.webp') // defaults to ./<pack>-<author>.webp
 const message = await sticker.toMessage() // { sticker, isAnimated, width, height } for Baileys
+const sound = await sticker.toSoundSticker() // the sticker plus an Ogg Opus sound, see Stickers with sound
 
 // Or in one call, with the same arguments as the constructor
 const buffer2 = await createSticker(input, { pack: 'My Pack' })
@@ -178,7 +245,7 @@ Videos are converted with ffmpeg. wa-sticker-formatter looks for it in this orde
 3. the [`ffmpeg-static`](https://www.npmjs.com/package/ffmpeg-static) package, if installed
 4. `ffmpeg` on your `PATH`
 
-ffmpeg needs to be built with libwebp, which the usual packages are. Transparent VP9 WebM files, such as Telegram video stickers, keep their transparency when ffmpeg also has libvpx.
+ffmpeg needs to be built with libwebp, and with libopus for [stickers with sound](#stickers-with-sound). The usual packages and `ffmpeg-static` have both. Transparent VP9 WebM files, such as Telegram video stickers, keep their transparency when ffmpeg also has libvpx.
 
 ## Troubleshooting
 

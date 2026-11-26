@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.1.0
+
+### Added
+
+- Stickers with sound. `toSoundSticker()` returns the animated sticker plus an Ogg Opus sound, taken from the video itself or from a separate audio file, with the length and waveform WhatsApp's audio message needs.
+- `patchBaileysProto()` adds the `audioStickerMessage` and `StickerMessage.audioMessage` fields to Baileys' protobuf classes. Without it, Baileys 7.0.0-rc14 sends sound stickers as empty messages and drops them when they're received. The README shows how to send one.
+
 ## 5.0.0
 
 A rewrite of the conversion code on current dependencies. The public API (`Sticker`, `createSticker`, `StickerTypes`, `extractMetadata`, `Exif`) is the same; the breaking changes are listed below.

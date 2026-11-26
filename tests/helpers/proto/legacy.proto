@@ -1,0 +1,34 @@
+// The parts of WhatsApp's proto that sound stickers touch, as Baileys 7.0.0-rc14 has them:
+// without Message.audioStickerMessage (134) and StickerMessage.audioMessage (26).
+// legacy.mjs and sound.mjs are generated with Baileys' pbjs flags, each with its own root:
+//   npx -p protobufjs-cli@1.1.3 -p protobufjs@7 pbjs -t static-module --no-beautify -w es6 --no-bundle \
+//     --no-delimited --no-verify --no-comments -r legacy -o legacy.mjs legacy.proto
+// then the protobufjs import is changed to `import $protobuf from "protobufjs/minimal.js"`, as Baileys does.
+syntax = "proto3";
+package proto;
+
+message Message {
+    optional string conversation = 1;
+    optional StickerMessage stickerMessage = 26;
+    optional FutureProofMessage viewOnceMessage = 37;
+
+    message StickerMessage {
+        optional string url = 1;
+        optional string mimetype = 5;
+        optional uint32 height = 6;
+        optional uint32 width = 7;
+        optional bool isAnimated = 13;
+    }
+
+    message AudioMessage {
+        optional string url = 1;
+        optional string mimetype = 2;
+        optional uint32 seconds = 5;
+        optional bool ptt = 6;
+        optional bytes waveform = 19;
+    }
+
+    message FutureProofMessage {
+        optional Message message = 1;
+    }
+}
