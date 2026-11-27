@@ -58,15 +58,15 @@ sock.ev.on('messages.upsert', async ({ messages }) => {
 
 ### Stickers with sound
 
-WhatsApp is rolling out stickers that play a sound when tapped. A sound sticker is an ordinary animated WebP plus an Ogg Opus audio file. The two are uploaded separately and sent together in a new `audioStickerMessage`. `toSoundSticker()` makes both files:
+WhatsApp is rolling out stickers that play a sound when tapped. A sound sticker is a WebP sticker plus an Ogg Opus audio file. The two are uploaded separately and sent together in a new `audioStickerMessage`. `toSoundSticker()` makes both files:
 
 ```ts
 const sound = await new Sticker('./clip.mp4', { pack: 'My Pack' }).toSoundSticker() // the video's own sound
-const meme = await new Sticker('./dance.gif').toSoundSticker('./bruh.mp3') // any audio or video file
+const meme = await new Sticker('./image.png').toSoundSticker('./bruh.mp3') // any image, GIF or video + audio
 // { sticker, isAnimated, width, height, audio, seconds, waveform }
 ```
 
-The sticker has to be animated, so the input must be a video, GIF or animated WebP. The sound is cut to `maxDuration`, like the animation. Making the audio needs ffmpeg, even for GIFs.
+Still images work when you pass an audio or video file (`isAnimated` stays `false`); without a separate audio argument, the input must be a video with an audio track. The sound (and animation, if any) is cut to `maxDuration`. Making the audio needs ffmpeg, even for images and GIFs.
 
 What we measured by sending sound stickers from Baileys to an Android phone in November 2026:
 
@@ -91,7 +91,7 @@ const sendSoundSticker = async (jid: string, sound: SoundSticker) => {
         upload
     )
     const { stickerMessage } = await prepareWAMessageMedia(
-        { sticker: sound.sticker, isAnimated: true, width: sound.width, height: sound.height },
+        { sticker: sound.sticker, isAnimated: sound.isAnimated, width: sound.width, height: sound.height },
         upload
     )
     // Baileys' types don't have the new fields yet, hence the cast

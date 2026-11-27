@@ -141,24 +141,25 @@ export class Sticker {
     }
 
     /**
-     * Builds a sticker with sound: the animated WebP plus an Ogg Opus audio track. WhatsApp sends
+     * Builds a sticker with sound: the WebP sticker plus an Ogg Opus audio track. WhatsApp sends
      * the two as separate files, so `sticker` has no sound in it. See the README for sending it with
      * Baileys and `patchBaileysProto()`.
      *
-     * Sound stickers must be animated, so the input has to be a video, GIF or animated WebP.
-     * Both the animation and the sound are cut to `maxDuration` (10 seconds by default).
+     * Still images work when you pass an `audio` file (`isAnimated` stays `false`). Without `audio`,
+     * the input must be a video with an audio track. Both the animation (if any) and the sound are
+     * cut to `maxDuration` (10 seconds by default).
      * @param audio - Where the sound comes from. Defaults to the input video's own audio track.
      *   Pass any audio or video file (Buffer, path, URL or stream) to use that sound instead.
      * @example
      * const sound = await new Sticker('./clip.mp4').toSoundSticker()
-     * const meme = await new Sticker('./dance.gif').toSoundSticker('./bruh.mp3')
+     * const meme = await new Sticker('./image.png').toSoundSticker('./bruh.mp3')
      */
     public async toSoundSticker(audio?: StickerInput): Promise<SoundSticker> {
         const input = await readInput(this.data)
         const message = await this.process(input)
-        if (!message.isAnimated) {
+        if (audio === undefined && !message.isAnimated) {
             throw new Error(
-                'Sound stickers must be animated. Make them from a video, GIF or animated WebP, not a still image.'
+                'A still image has no sound. Pass an audio or video file to toSoundSticker(audio), or use a video with sound.'
             )
         }
         const track = await encodeAudio(audio === undefined ? input : await readInput(audio), this.maxDuration)

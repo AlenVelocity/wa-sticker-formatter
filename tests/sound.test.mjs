@@ -46,8 +46,17 @@ describe('sound stickers', { skip, timeout: 300_000 }, () => {
         await assert.rejects(new Sticker(mp4()).toSoundSticker(), /no audio track/)
     })
 
-    it('rejects still images', async () => {
-        await assert.rejects(new Sticker(await png(64, 64)).toSoundSticker(tone()), /must be animated/)
+    it('supports still images with a separate audio file', async () => {
+        const sound = await new Sticker(await png(64, 64), { pack: 'Still' }).toSoundSticker(tone({ seconds: 2 }))
+        assert.equal(sound.isAnimated, false)
+        assert.deepEqual([sound.width, sound.height], [64, 64])
+        assert.equal((await extractMetadata(sound.sticker))['sticker-pack-name'], 'Still')
+        assert.match(streams(sound.audio)[0], /^Audio: opus/)
+        assert.equal(sound.seconds, 2)
+    })
+
+    it('rejects still images without an audio file', async () => {
+        await assert.rejects(new Sticker(await png(64, 64)).toSoundSticker(), /still image has no sound/)
     })
 
     it('leaves the sound out of toMessage()', async () => {
