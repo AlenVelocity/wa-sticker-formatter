@@ -1,8 +1,8 @@
 name: Publish
 
-# Publishes to npm when a GitHub release is published.
-# Set up npm trusted publishing for this workflow (npmjs.com > package settings > Trusted publishing),
-# or add an NPM_TOKEN repository secret.
+# Publishes to npm when a GitHub release is published, using npm trusted publishing (no token).
+# One-time setup on npmjs.com: package Settings > Trusted Publisher > GitHub Actions, with
+# user "AlenVelocity", repository "wa-sticker-formatter" and workflow "publish.yml".
 on:
   release:
     types: [published]
@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # No registry-url here: it makes setup-node write a token to .npmrc, which npm then uses instead of OIDC
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
           cache: npm
+      # Trusted publishing needs npm 11.5.1 or newer
+      - run: npm install -g npm@latest
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
       - run: npm ci
       - run: npm run check
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
